@@ -77,7 +77,7 @@ int (*array_from_file(char *filePath))[ARRAY_SIZE] {
         exit(EXIT_FAILURE);
     }
 
-    // Reset the file pointer.
+    // Reset the file pointer. Resets the current position of the pointer to the start of the file
     rewind(file);
     
     // Read the file and store the values in the array.
