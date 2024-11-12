@@ -23,7 +23,8 @@ double *overflow_accurencens(int startDateTime, int endDateTime, double threshol
 void draw_graph(double *array);
 
 int main(void) {
-    // Declare a 2 dimesional array.
+    // Declare a two dimensional array. We dont know the value, so we cannot initalize the array
+    // We dont know the value so we tell it to have integers in the two dimensional array
     int (*array)[2];
 
     // Makes array from file.
