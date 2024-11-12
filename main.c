@@ -23,11 +23,13 @@ double *overflow_accurencens(int startDateTime, int endDateTime, double threshol
 void draw_graph(double *array);
 
 int main(void) {
+    // Declare a 2 dimesional array.
     int (*array)[2];
 
-
+    // Makes array from file.
     array = array_from_file("data.txt");
 
+    //
     for (int i = 0; i < 5; i++) {
         printf("%d %d\n", array[i][0], array[i][1]);
     }
@@ -40,26 +42,26 @@ int (*array_from_file(char *filePath))[2] {
     int lines = 0;
     char ch;
 
-    // Open the data file in read mode
+    // Open the data file in read mode.
     FILE *file = fopen(filePath, "r");
 
-    // Buffer to store the lines
+    // Buffer to store the lines.
     char line[25];
 
-    // Error handling
+    // Error handling.
     if (file == NULL) {
         printf("Error reading file\n");
         exit(EXIT_FAILURE);
     }
 
-    // Calculates the number of lines
-    // Check if end of file
+    // Calculates the number of lines.
+    // Check if end of file.
     while (!feof(file)) 
     {
-        // Get next char in file
+        // Get next char in file.
         ch = fgetc(file);
 
-        // Checks if the char is a newline
+        // Checks if the char is a newline.
         if (ch == '\n') {
             lines++;
         }
@@ -72,7 +74,7 @@ int (*array_from_file(char *filePath))[2] {
         exit(EXIT_FAILURE);
     }
 
-    // Reset the file pointer
+    // Reset the file pointer.
     rewind(file);
     
     for (int i = 0; i < lines; i++){
