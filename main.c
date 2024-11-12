@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+// Prototypes
+
 // The output array shoud be dataArray[dateTime][frequency]
 int (*array_from_file(char *filePath))[2];
 
