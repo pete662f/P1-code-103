@@ -1,10 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// Prototypes
+#define ARRAY_SIZE 2
 
 // The output array shoud be dataArray[dateTime][frequency]
-int (*array_from_file(char *filePath))[2];
+int (*array_from_file(char *filePath))[ARRAY_SIZE];
 
 // The flow can be calculated using calculus Q=dV/dt out array shoud be flowArray[dateTime][flow]
 double *flow_array(int *dataArray);
@@ -25,14 +25,12 @@ double *overflow_accurencens(int startDateTime, int endDateTime, double threshol
 void draw_graph(double *array);
 
 int main(void) {
-    // Declare a two dimensional array. We dont know the value, so we cannot initalize the array
-    // We dont know the value so we tell it to have integers in the two dimensional array
-    int (*array)[2];
+    // Declare a two dimensional array, without a set length.
+    int (*array)[ARRAY_SIZE];
 
-    // Makes array from file.
     array = array_from_file("data.txt");
 
-    //
+    // Prints time and frequency.
     for (int i = 0; i < 5; i++) {
         printf("%d %d\n", array[i][0], array[i][1]);
     }
@@ -40,7 +38,8 @@ int main(void) {
     return 0;
 }
 
-int (*array_from_file(char *filePath))[2] {
+// This function reads the data from a file and stores it in a two dimensional array.
+int (*array_from_file(char *filePath))[ARRAY_SIZE] {
     int time, frequency;
     int lines = 0;
     char ch;
@@ -69,9 +68,10 @@ int (*array_from_file(char *filePath))[2] {
             lines++;
         }
     }
+    // We have to double the size of the malloc because we will have two integers in each index.
+    int (*array)[ARRAY_SIZE] = malloc(sizeof(int) * lines * ARRAY_SIZE);
 
-    int (*array)[2] = malloc(sizeof(int) * lines * 2);
-
+    // Validate the initialization of the array.
     if (array == NULL) {
         printf("Error in array\n");
         exit(EXIT_FAILURE);
@@ -80,8 +80,11 @@ int (*array_from_file(char *filePath))[2] {
     // Reset the file pointer.
     rewind(file);
     
+    // Read the file and store the values in the array.
     for (int i = 0; i < lines; i++){
+        // Read the line from the file and sizeof(line) is the size of the buffer.
         fgets(line, sizeof(line), file);
+        // sscanf is used to read formatted input from a string.
         sscanf(line, "%d %d", &time, &frequency);
         array[i][0] = time;
         array[i][1] = frequency;
