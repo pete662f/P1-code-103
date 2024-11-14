@@ -9,6 +9,9 @@ int (*array_from_file(char *filePath, int *size))[ARRAY_SIZE];
 // The flow can be calculated using calculus Q=dV/dt out array shoud be flowArray[dateTime][flow]
 double (*flow_array(int (*dataArray)[ARRAY_SIZE], int size))[ARRAY_SIZE];
 
+// The height of the water can be calculated using the formula h=(Q^2)/(2*g*A^2) out array shoud be heightArray[dateTime][height]
+double (*height_array(double (*flowArray)[ARRAY_SIZE], int size))[ARRAY_SIZE];
+
 // This function takes the avage flow in a given time
 double avage_flow(int startDateTime, int endDateTime, double *flowArray);
 
@@ -28,11 +31,14 @@ int main(void) {
     // Declare a two dimensional array, without a set length.
     int (*array)[ARRAY_SIZE];
     double (*flowArray)[ARRAY_SIZE];
+    double (*heightArray)[ARRAY_SIZE];
     int size;
 
     array = array_from_file("data.txt", &size);
 
     flowArray = flow_array(array, size);
+
+    heightArray = height_array(flowArray, size);
 
     // Prints time and rotations.
     for (int i = 0; i < size; i++) {
@@ -41,6 +47,10 @@ int main(void) {
 
     for (int i = 0; i < size; i++) {
         printf("%f %f\n", flowArray[i][0], flowArray[i][1]);
+    }
+    
+    for (int i = 0; i < size; i++) {
+        printf("%f %f\n", heightArray[i][0], heightArray[i][1]);
     }
 
     free(array);
@@ -51,7 +61,7 @@ int main(void) {
 double (*flow_array(int (*dataArray)[ARRAY_SIZE], int size))[ARRAY_SIZE] {
     // We have to double the size of the malloc because we will have two doubles in each index.
     double (*flowArray)[ARRAY_SIZE] = malloc(sizeof(double) * size * ARRAY_SIZE);
-    double V = 0.1; // 0.1 L CHANGE ME
+    double V = 0.1; // TODO: CHANGE ME 
     double deltaTime;
 
     // Validate the initialization of the array.
@@ -60,15 +70,38 @@ double (*flow_array(int (*dataArray)[ARRAY_SIZE], int size))[ARRAY_SIZE] {
         exit(EXIT_FAILURE);
     }
 
+    // Calculates the flow using Q=dv/dt for each time
     for (int i = 0; i < size; i++) {
         flowArray[i][0] = (double)dataArray[i][0];
 
-        // Asumes the time intervals do not change.
-        deltaTime = (double)dataArray[1][0]-(double)dataArray[0][0];
+        if (i > 0) {
+            deltaTime = (double)(dataArray[i][0] - dataArray[i - 1][0]);
+        } else {
+            deltaTime = 1.0;
+        }
+        
         flowArray[i][1] = (double)dataArray[i][1]*V/deltaTime;
     }
 
     return flowArray;
+}
+
+double (*height_array(double (*flowArray)[ARRAY_SIZE], int size))[ARRAY_SIZE] {
+    double (*heightArray)[ARRAY_SIZE] = malloc(sizeof(double) * size * ARRAY_SIZE);
+    double g = 9.81; // Gravitational acceleration constant
+    double A = 0.1; // TODO: CHANGE ME
+    double Q; // Volematric flow rate
+
+    for (int i = 0; i < size; i++)
+    {
+        heightArray[i][0] = flowArray[i][0];
+
+        // Calculating the height of the water
+        Q=flowArray[i][1];
+        heightArray[i][1] = (Q*Q)/(2*g*A*A);
+    }
+    
+    return heightArray;
 }
 
 // This function reads the data from a file and stores it in a two dimensional array.
