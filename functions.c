@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <strings.h>
+#include <dirent.h> 
 
 #define ARRAY_SIZE 2
 
@@ -27,14 +29,19 @@ double *overflow_accurencens(int startDateTime, int endDateTime, double threshol
 // Coud use https://gr-framework.org/c.html for drawing graphs or 
 void draw_graph(double *array);
 
+int number_of_sensors(char folderParth[100]);
+
+char (*parth_of_sensors(char folderParth[100]))[1024];
+
 int main(void) {
     // Declare a two dimensional array, without a set length.
     int (*array)[ARRAY_SIZE];
     double (*flowArray)[ARRAY_SIZE];
     double (*heightArray)[ARRAY_SIZE];
+    char (*stringParths)[1024];
     int size;
 
-    array = array_from_file("data.txt", &size);
+    array = array_from_file("./data/sensor0.txt", &size);
 
     flowArray = flow_array(array, size);
 
@@ -52,6 +59,16 @@ int main(void) {
     for (int i = 0; i < size; i++) {
         printf("%f %f\n", heightArray[i][0], heightArray[i][1]);
     }
+
+    stringParths = parth_of_sensors("./data/");
+
+    size = number_of_sensors("./data/");
+
+    for (int i = 0; i < size; i++)
+    {
+        printf("%d %s\n",i,stringParths[i]);
+    }
+    
 
     free(array);
 
@@ -172,4 +189,50 @@ int (*array_from_file(char *filePath, int *size))[ARRAY_SIZE] {
     fclose(file);
 
     return array;
+}
+
+int number_of_sensors(char folderParth[100]) {
+    DIR *d;
+    struct dirent *dir;
+    int count = 0;
+
+    d = opendir(folderParth);
+
+    if (d) {
+        // Loops over all the files in the folder
+        while ((dir = readdir(d)) != NULL) {
+            // Checks if the dirnames are not . or ..
+            if (strcmp(dir->d_name, ".") && strcmp(dir->d_name, "..")) {
+                count++;
+            } 
+        }
+        closedir(d);
+    }
+
+    return count;
+}
+
+char (*parth_of_sensors(char folderParth[100]))[1024] {
+    DIR *d;
+    struct dirent *dir;
+    int size = number_of_sensors(folderParth);
+    char (*parth)[1024] = malloc(sizeof(char *) * size);
+    int i = 0;
+
+    d = opendir(folderParth);
+
+    if (d) {
+        // Loops over all the files in the folder
+        while ((dir = readdir(d)) != NULL) {
+            // Checks if the dirnames are not . or ..
+            if (strcmp(dir->d_name, ".") && strcmp(dir->d_name, "..")) {
+                // Copy the name of the file into parth array.
+                strcpy(parth[i], dir->d_name);
+                i++;
+            } 
+        }
+        closedir(d);
+    }
+
+    return parth;
 }
