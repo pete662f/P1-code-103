@@ -74,26 +74,35 @@ double (*flow_array(int (*dataArray)[ARRAY_SIZE], int size))[ARRAY_SIZE] {
     for (int i = 0; i < size; i++) {
         flowArray[i][0] = (double)dataArray[i][0];
 
+        // Calculate the time difference between the current and previous time.
         if (i > 0) {
             deltaTime = (double)(dataArray[i][0] - dataArray[i - 1][0]);
         } else {
             deltaTime = 1.0;
         }
-        
+
+        // Calculate the flow rate.  
         flowArray[i][1] = (double)dataArray[i][1]*V/deltaTime;
     }
 
     return flowArray;
 }
-
+    
 double (*height_array(double (*flowArray)[ARRAY_SIZE], int size))[ARRAY_SIZE] {
     double (*heightArray)[ARRAY_SIZE] = malloc(sizeof(double) * size * ARRAY_SIZE);
     double g = 9.81; // Gravitational acceleration constant
     double A = 0.1; // TODO: CHANGE ME
     double Q; // Volematric flow rate
 
+    // Validate the initialization of the array.
+    if (heightArray == NULL) {
+        printf("Error in array\n");
+        exit(EXIT_FAILURE);
+    }
+    
     for (int i = 0; i < size; i++)
     {
+        // Copying the time from the flowArray to the heightArray
         heightArray[i][0] = flowArray[i][0];
 
         // Calculating the height of the water
@@ -116,7 +125,7 @@ int (*array_from_file(char *filePath, int *size))[ARRAY_SIZE] {
     // Buffer to store the lines.
     char line[25];
 
-    // Error handling.
+    // Validate the opening of the file.
     if (file == NULL) {
         printf("Error reading file\n");
         exit(EXIT_FAILURE);
