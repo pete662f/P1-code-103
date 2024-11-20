@@ -58,7 +58,7 @@ void sensor_menu() {
     int sensorChoice;
     int numberOfSensors;
 
-
+    // Uses functions from functions.h (number_of_sensors, and parth_of_sensors) 
     numberOfSensors = number_of_sensors("./data/");
     sensor *sensor = parth_of_sensors("./data/");
 
@@ -67,6 +67,7 @@ void sensor_menu() {
 
     for (int i = 0; i < numberOfSensors; i++){
         char *pch;
+        // Pch removes file exstention (.txt) on sensor menu
         pch = strtok(sensor[i].name,".");
         printf("%d. %s\n", i + 1, pch);
     }
