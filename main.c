@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <strings.h>
+#include "functions.h"
 
 void water_level_graph();
 void water_level_statistics();
@@ -53,17 +55,29 @@ void main_menu() {
 }
 
 void sensor_menu() {
-    int sensor_choice;
+    int sensorChoice;
+    int numberOfSensors;
+
+    // Uses functions from functions.h (number_of_sensors, and parth_of_sensors) 
+    numberOfSensors = number_of_sensors("./data/");
+    sensor *sensor = parth_of_sensors("./data/");
 
     printf("\n--- Sensor menu ---\n");
     printf("0. All sensors\n");
-    printf("1. Sensor 1\n");
-    printf("2. Sensor 2\n");
-    printf("3. Sensor 3\n");
-    printf("Choose sensor: ");
-    scanf("%d", &sensor_choice);
 
-    switch (sensor_choice) {
+    for (int i = 0; i < numberOfSensors; i++){
+        char *pch;
+        // Pch removes file exstention (.txt) on sensor menu
+        pch = strtok(sensor[i].name,".");
+        printf("%d. %s\n", i + 1, pch);
+    }
+
+    free(sensor);
+
+    printf("Choose sensor: ");
+    scanf("%d", &sensorChoice);
+
+    switch (sensorChoice) {
         case 0:
             printf("0. All sensors\n");
             break;
