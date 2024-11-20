@@ -1,18 +1,42 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <strings.h>
-#include <dirent.h> 
+#include <dirent.h>
 
-#define ARRAY_SIZE 2
+struct data {
+    int time;
+    int rotations;
+};
 
-// The output array shoud be dataArray[dateTime][rotations]
-int (*array_from_file(char *filePath, int *size))[ARRAY_SIZE];
+struct flow {
+    int time;
+    double flow;
+};
 
-// The flow can be calculated using calculus Q=dV/dt out array shoud be flowArray[dateTime][flow]
-double (*flow_array(int (*dataArray)[ARRAY_SIZE], int size))[ARRAY_SIZE];
+struct height {
+    int time;
+    double height;
+};
 
-// The height of the water can be calculated using the formula h=(Q^2)/(2*g*A^2) out array shoud be heightArray[dateTime][height]
-double (*height_array(double (*flowArray)[ARRAY_SIZE], int size))[ARRAY_SIZE];
+struct sensor {
+    int id;
+    char name[1024];
+    char parth[1024];
+};
+
+typedef struct data data;
+typedef struct flow flow;
+typedef struct height height;
+typedef struct sensor sensor;
+
+// This function reads the data from a file and stores it in a two dimensional array.
+data *array_from_file(char *filePath, int *size);
+
+// This function calculates the flow rate using the formula Q=dv/dt
+flow *flow_array(data *dataArray, int size);
+
+// This function calculates the height of the water using the formula h=(Q^2)/(2*g*A^2)
+height *height_array(flow *flowArray, int size);
 
 // This function takes the avage flow in a given time
 double avage_flow(int startDateTime, int endDateTime, double *flowArray);
@@ -31,14 +55,14 @@ void draw_graph(double *array);
 
 int number_of_sensors(char folderParth[100]);
 
-char (*parth_of_sensors(char folderParth[100]))[1024];
+sensor *parth_of_sensors(char folderParth[100]);
 
 int main(void) {
     // Declare a two dimensional array, without a set length.
-    int (*array)[ARRAY_SIZE];
-    double (*flowArray)[ARRAY_SIZE];
-    double (*heightArray)[ARRAY_SIZE];
-    char (*stringParths)[1024];
+    data *array;
+    flow *flowArray;
+    height *heightArray;
+    sensor *stringParths;
     int size;
 
     array = array_from_file("./data/sensor0.txt", &size);
@@ -49,15 +73,15 @@ int main(void) {
 
     // Prints time and rotations.
     for (int i = 0; i < size; i++) {
-        printf("%d %d\n", array[i][0], array[i][1]);
+        printf("%d %d\n", array[i].time, array[i].rotations);
     }
 
     for (int i = 0; i < size; i++) {
-        printf("%f %f\n", flowArray[i][0], flowArray[i][1]);
+        printf("%d %f\n", flowArray[i].time, flowArray[i].flow);
     }
     
     for (int i = 0; i < size; i++) {
-        printf("%f %f\n", heightArray[i][0], heightArray[i][1]);
+        printf("%d %f\n", heightArray[i].time, heightArray[i].height);
     }
 
     stringParths = parth_of_sensors("./data/");
@@ -66,7 +90,7 @@ int main(void) {
 
     for (int i = 0; i < size; i++)
     {
-        printf("%d %s\n",i,stringParths[i]);
+        printf("%d %s\n",stringParths[i].id,stringParths[i].name);
     }
     
 
@@ -75,9 +99,9 @@ int main(void) {
     return 0;
 }
 
-double (*flow_array(int (*dataArray)[ARRAY_SIZE], int size))[ARRAY_SIZE] {
+flow *flow_array(data *dataArray, int size) {
     // We have to double the size of the malloc because we will have two doubles in each index.
-    double (*flowArray)[ARRAY_SIZE] = malloc(sizeof(double) * size * ARRAY_SIZE);
+    flow *flowArray = malloc(sizeof(flow) * size);
     double V = 0.1; // TODO: CHANGE ME 
     double deltaTime;
 
@@ -89,24 +113,24 @@ double (*flow_array(int (*dataArray)[ARRAY_SIZE], int size))[ARRAY_SIZE] {
 
     // Calculates the flow using Q=dv/dt for each time
     for (int i = 0; i < size; i++) {
-        flowArray[i][0] = (double)dataArray[i][0];
+        flowArray[i].time = (double)dataArray[i].time;
 
         // Calculate the time difference between the current and previous time.
         if (i > 0) {
-            deltaTime = (double)(dataArray[i][0] - dataArray[i - 1][0]);
+            deltaTime = (double)(dataArray[i].time - dataArray[i - 1].time);
         } else {
             deltaTime = 1.0;
         }
 
         // Calculate the flow rate.  
-        flowArray[i][1] = (double)dataArray[i][1]*V/deltaTime;
+        flowArray[i].flow = (double)dataArray[i].rotations*V/deltaTime;
     }
 
     return flowArray;
 }
     
-double (*height_array(double (*flowArray)[ARRAY_SIZE], int size))[ARRAY_SIZE] {
-    double (*heightArray)[ARRAY_SIZE] = malloc(sizeof(double) * size * ARRAY_SIZE);
+height *height_array(flow *flowArray, int size) {
+    height *heightArray = malloc(sizeof(height) * size);
     double g = 9.81; // Gravitational acceleration constant
     double A = 0.1; // TODO: CHANGE ME
     double Q; // Volematric flow rate
@@ -120,18 +144,18 @@ double (*height_array(double (*flowArray)[ARRAY_SIZE], int size))[ARRAY_SIZE] {
     for (int i = 0; i < size; i++)
     {
         // Copying the time from the flowArray to the heightArray
-        heightArray[i][0] = flowArray[i][0];
+        heightArray[i].time = flowArray[i].time;
 
         // Calculating the height of the water
-        Q=flowArray[i][1];
-        heightArray[i][1] = (Q*Q)/(2*g*A*A);
+        Q=flowArray[i].flow;
+        heightArray[i].height = (Q*Q)/(2*g*A*A);
     }
     
     return heightArray;
 }
 
 // This function reads the data from a file and stores it in a two dimensional array.
-int (*array_from_file(char *filePath, int *size))[ARRAY_SIZE] {
+data *array_from_file(char *filePath, int *size) {
     int time, rotations;
     int lines = 0;
     char ch;
@@ -165,7 +189,7 @@ int (*array_from_file(char *filePath, int *size))[ARRAY_SIZE] {
     *size = lines;
 
     // We have to double the size of the malloc because we will have two integers in each index.
-    int (*array)[ARRAY_SIZE] = malloc(sizeof(int) * lines * ARRAY_SIZE);
+    data *array = malloc(sizeof(data) * lines);
 
     // Validate the initialization of the array.
     if (array == NULL) {
@@ -182,8 +206,8 @@ int (*array_from_file(char *filePath, int *size))[ARRAY_SIZE] {
         fgets(line, sizeof(line), file);
         // sscanf is used to read formatted input from a string.
         sscanf(line, "%d %d", &time, &rotations);
-        array[i][0] = time;
-        array[i][1] = rotations;
+        array[i].time = time;
+        array[i].rotations = rotations;
     }
 
     fclose(file);
@@ -191,7 +215,7 @@ int (*array_from_file(char *filePath, int *size))[ARRAY_SIZE] {
     return array;
 }
 
-int number_of_sensors(char folderParth[100]) {
+int number_of_sensors(char folderParth[1024]) {
     DIR *d;
     struct dirent *dir;
     int count = 0;
@@ -212,11 +236,11 @@ int number_of_sensors(char folderParth[100]) {
     return count;
 }
 
-char (*parth_of_sensors(char folderParth[100]))[1024] {
+sensor *parth_of_sensors(char folderParth[1024]) {
     DIR *d;
     struct dirent *dir;
     int size = number_of_sensors(folderParth);
-    char (*parth)[1024] = malloc(sizeof(char *) * size);
+    sensor *parth = malloc(sizeof(sensor) * size);
     int i = 0;
 
     d = opendir(folderParth);
@@ -227,7 +251,9 @@ char (*parth_of_sensors(char folderParth[100]))[1024] {
             // Checks if the dirnames are not . or ..
             if (strcmp(dir->d_name, ".") && strcmp(dir->d_name, "..")) {
                 // Copy the name of the file into parth array.
-                strcpy(parth[i], dir->d_name);
+                strcpy(parth[i].parth, dir->d_name);
+                strcpy(parth[i].name, dir->d_name);
+                parth[i].id = i;
                 i++;
             } 
         }
