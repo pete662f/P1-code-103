@@ -48,6 +48,6 @@ double *overflow_accurencens(int startDateTime, int endDateTime, double threshol
 // Coud use https://gr-framework.org/c.html for drawing graphs or 
 void draw_graph(double *array);
 
-int number_of_sensors(char folderParth[100]);
+int number_of_sensors(char folderParth[1024]);
 
-sensor *parth_of_sensors(char folderParth[100]);
+sensor *parth_of_sensors(char folderParth[1024]);

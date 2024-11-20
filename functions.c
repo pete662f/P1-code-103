@@ -4,7 +4,7 @@
 #include <dirent.h>
 #include "functions.h"
 
-int main(void) {
+/*int main(void) {
     // Declare a two dimensional array, without a set length.
     data *array;
     flow *flowArray;
@@ -44,7 +44,7 @@ int main(void) {
     free(array);
 
     return 0;
-}
+}*/
 
 flow *flow_array(data *dataArray, int size) {
     // We have to double the size of the malloc because we will have two doubles in each index.
