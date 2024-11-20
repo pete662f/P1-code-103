@@ -1,5 +1,5 @@
 #include <stdio.h>
-
+#include <stdlib.h>
 
 void water_level_graph();
 void water_level_statistics();
@@ -23,7 +23,6 @@ void main_menu() {
         printf("2: Water level Statistics\n");
         printf("3: Flow graph\n");
         printf("4: Set water level alarm\n");
-        printf("5: Sensor menu\n");
         printf("0: finish\n");
         printf("Choose where you want to go:");
         scanf("%d", &choice);
@@ -42,11 +41,9 @@ void main_menu() {
             case 4:
                 set_water_level_alarm();
                 break;
-            case 5:
-                sensor_menu();
-                break;
             case 0:
                 printf("Finishing the program");   // hvis man skriver 0
+                exit(EXIT_SUCCESS);
                 break;
             default:
                 printf("Error: No choice!");
