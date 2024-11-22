@@ -27,6 +27,7 @@ void sensor_menu() {
     numberOfSensors = number_of_sensors("./data/");
     sensor *sensor = parth_of_sensors("./data/");
 
+// The code in the do-while loop runs until the conditions in the while-loop are fullfilled
     do {
         printf("\n--- Sensor Menu ---\n");
         printf("0. All sensors\n");
@@ -38,8 +39,6 @@ void sensor_menu() {
             printf("%d. %s\n", i + 1, pch);
         }
 
-        
-
         printf("Choose sensor: ");
         isValid = scanf(" %d", &choice);
 
@@ -47,7 +46,7 @@ void sensor_menu() {
         while (getchar() != '\n');    
 
         if (choice > numberOfSensors || choice < 0 || !isValid) {
-            printf("\n\x1B[31mInvalid sensor choice!\x1B[0m\n");
+            printf("\n\x1B[31mInvalid sensor choice!\x1B[0m\n");    // colors the printf statement in the terminal
         }
     } while (choice > numberOfSensors || choice < 0 || !isValid);
     
@@ -91,7 +90,7 @@ void data_menu(int sensorChoice) {
                 exit(EXIT_SUCCESS);
                 break;
             default:
-                printf("\n\x1B[31mInvalid choice!\x1B[0m\n");
+                printf("\n\x1B[31mInvalid choice!\x1B[0m\n");    // colors the printf statement in the terminal
         }
     } while (choice < 0 || choice > 4 || !isValid);
 }
