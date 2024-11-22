@@ -82,7 +82,7 @@ void data_menu(int sensorChoice) {
             set_water_level_alarm(sensorChoice);
             break;
         case 0:
-            printf("Exiting the program\n");       // hvis man skriver 0
+            printf("Exiting the program\n");       // If you type 0
             exit(EXIT_SUCCESS);
             break;
         default:
