@@ -56,39 +56,39 @@ void sensor_menu() {
 void data_menu(int sensorChoice) {
     int choice;
     
-    printf("\n--- Data Menu ---\n");
-    printf("1: Water level graph\n");
-    printf("2: Water level Statistics\n");
-    printf("3: Flow graph\n");
-    printf("4: Set water level alarm\n");
-    printf("0: Exit the program\n");
-    printf("Choose where you want to go: ");
-    scanf(" %d", &choice);
+    while (1) {
+        printf("\n--- Data Menu ---\n");
+        printf("1: Water level graph\n");
+        printf("2: Water level Statistics\n");
+        printf("3: Flow graph\n");
+        printf("4: Set water level alarm\n");
+        printf("0: Exit the program\n");
+        printf("Choose where you want to go: ");
+        scanf(" %d", &choice);
 
-    // Removes the input buffer
-    while (getchar() != '\n');    
+        // Removes the input buffer
+        while (getchar() != '\n');    
 
-    switch (choice) {
-        case 1:
-            water_level_graph(sensorChoice);
-            break;
-        case 2:
-            water_level_statistics(sensorChoice);
-            break;
-        case 3:
-            flow_graph(sensorChoice);
-            break;
-        case 4:
-            set_water_level_alarm(sensorChoice);
-            break;
-        case 0:
-            printf("Exiting the program\n");       // If you type 0
-            exit(EXIT_SUCCESS);
-            break;
-        default:
-            printf("Error: No choice!\n");
-            exit(EXIT_SUCCESS);
-            break;
+        switch (choice) {
+            case 1:
+                water_level_graph(sensorChoice);
+                break;
+            case 2:
+                water_level_statistics(sensorChoice);
+                break;
+            case 3:
+                flow_graph(sensorChoice);
+                break;
+            case 4:
+                set_water_level_alarm(sensorChoice);
+                break;
+            case 0:
+                printf("Exiting the program\n");       // If you type 0
+                exit(EXIT_SUCCESS);
+                break;
+            default:
+                printf("Error: No choice!\n");
+        }
     }
 }
 
