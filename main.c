@@ -7,65 +7,30 @@ void water_level_graph();
 void water_level_statistics();
 void flow_graph();
 void set_water_level_alarm();
-void main_menu();
+void data_menu();
 void sensor_menu();
 
 int main(void) {
-
-    main_menu();
-
+    while (1) {
+        sensor_menu(); 
+    } 
+    
     return 0;
 }
 
-void main_menu() {
-    int choice;
-    while (1) {
-        printf("\n--- Main menu ---\n");
-        printf("1: Water level graph\n");
-        printf("2: Water level Statistics\n");
-        printf("3: Flow graph\n");
-        printf("4: Set water level alarm\n");
-        printf("0: finish\n");
-        printf("Choose where you want to go:");
-        scanf("%d", &choice);
-    
-    
-        switch (choice) {
-            case 1:
-                water_level_graph();
-                break;
-            case 2:
-                water_level_statistics();
-                break;
-            case 3:
-                flow_graph();
-                break;
-            case 4:
-                set_water_level_alarm();
-                break;
-            case 0:
-                printf("Finishing the program");   // hvis man skriver 0
-                exit(EXIT_SUCCESS);
-                break;
-            default:
-                printf("Error: No choice!");
-        
-        }
-    }
-}
-
 void sensor_menu() {
-    int sensorChoice;
+    int choice;
     int numberOfSensors;
+    int isValid;
 
     // Uses functions from functions.h (number_of_sensors, and parth_of_sensors) 
     numberOfSensors = number_of_sensors("./data/");
     sensor *sensor = parth_of_sensors("./data/");
 
-    printf("\n--- Sensor menu ---\n");
+    printf("\n--- Sensor Menu ---\n");
     printf("0. All sensors\n");
 
-    for (int i = 0; i < numberOfSensors; i++){
+    for (int i = 0; i < numberOfSensors; i++) {
         char *pch;
         // Pch removes file exstention (.txt) on sensor menu
         pch = strtok(sensor[i].name,".");
@@ -75,47 +40,75 @@ void sensor_menu() {
     free(sensor);
 
     printf("Choose sensor: ");
-    scanf("%d", &sensorChoice);
+    isValid = scanf(" %d", &choice);
 
-    switch (sensorChoice) {
-        case 0:
-            printf("0. All sensors\n");
-            break;
+    // Removes the input buffer
+    while (getchar() != '\n');    
+
+    if (choice > numberOfSensors || choice < 0 || !isValid) {
+        printf("Invalid sensor choice!\n");
+        exit(EXIT_FAILURE);
+    }
+    
+    data_menu(choice);
+}
+
+void data_menu(int sensorChoice) {
+    int choice;
+    
+    printf("\n--- Data Menu ---\n");
+    printf("1: Water level graph\n");
+    printf("2: Water level Statistics\n");
+    printf("3: Flow graph\n");
+    printf("4: Set water level alarm\n");
+    printf("0: Exit the program\n");
+    printf("Choose where you want to go: ");
+    scanf(" %d", &choice);
+
+    // Removes the input buffer
+    while (getchar() != '\n');    
+
+    switch (choice) {
         case 1:
-            printf("1. Sensor 1\n");
+            water_level_graph(sensorChoice);
             break;
         case 2:
-            printf("2. Sensor 2\n");
+            water_level_statistics(sensorChoice);
             break;
         case 3:
-            printf("3. Sensor 3\n");
+            flow_graph(sensorChoice);
+            break;
+        case 4:
+            set_water_level_alarm(sensorChoice);
+            break;
+        case 0:
+            printf("Exiting the program\n");       // hvis man skriver 0
+            exit(EXIT_SUCCESS);
             break;
         default:
-            printf("Error: No sensor chosen!");
+            printf("Error: No choice!\n");
+            exit(EXIT_SUCCESS);
+            break;
     }
 }
 
-void water_level_graph() {
-    sensor_menu();
-    printf("       ");
+void water_level_graph(int sensorChoice) {
+    printf("Water Level Graph, sensor %d\n", sensorChoice);
     // Code here
 }
 
-void water_level_statistics() {
-    sensor_menu();
-    printf("       ");
+void water_level_statistics(int sensorChoice) {
+    printf("Water Level Statistics, sensor %d\n", sensorChoice);
     // Code here
 }
 
-void flow_graph() {
-    sensor_menu();
-    printf("       ");
+void flow_graph(int sensorChoice) {
+    printf("Flow Graph, sensor %d\n", sensorChoice);
     // Code here
 }
 
-void set_water_level_alarm() {
-    sensor_menu();
-    printf("       ");
+void set_water_level_alarm(int sensorChoice) {
+    printf("Set Water Level Alarm, sensor %d\n", sensorChoice);
     // Code here
 }
 
