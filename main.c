@@ -9,7 +9,7 @@ void flow_graph(int sensorChoice);
 void set_water_level_alarm(int sensorChoice);
 void data_menu(int sensorChoice);
 void sensor_menu();
-double avage_flow(int timePeriod, flow flowArray[]);
+double average_flow(int timePeriod, flow flowArray[]);
 
 int main(void) {
     while (1) {
@@ -79,7 +79,7 @@ void data_menu(int sensorChoice) {
         switch (choice) {
             case 1:
                 // CHANGE ME - Test af funktion hører ikke til her.
-                printf("%f", avage_flow(1, arr));
+                printf("%f", average_flow(1, arr));
                 //water_level_graph(sensorChoice);
                 break;
             case 2:

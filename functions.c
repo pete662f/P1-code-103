@@ -6,8 +6,6 @@
 
 #define ROTATION_FLOW (2.25 / 1000) // CHANGE ME TO CORRECT RORATION_FLOW IN LITER
 
-#define ROTATION_FLOW (2.25 / 1000) //CHANGE ME TO CORRECT ROTATION_FLOW in LITER
-
 /*int main(void) {
     // Declare a two dimensional array, without a set length.
     data *array;
@@ -214,7 +212,7 @@ sensor *path_of_sensors(char folderPath[1024]) {
     return parth;
 }
 
-double avage_flow(int timePeriod, flow flowArray[]){
+double average_flow(int timePeriod, flow flowArray[]){
     //timePeriod in hours 
     int timeBetweenMeasurements = flowArray[1].time - flowArray[0].time; //In miliseconds
     double measurementsPerHour = 60 / (timeBetweenMeasurements / 1000 / 60);
