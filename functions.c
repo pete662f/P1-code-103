@@ -6,6 +6,8 @@
 
 #define ROTATION_FLOW (2.25 / 1000) // CHANGE ME TO CORRECT RORATION_FLOW IN LITER
 
+#define ROTATION_FLOW (2.25 / 1000) //CHANGE ME TO CORRECT ROTATION_FLOW in LITER
+
 /*int main(void) {
     // Declare a two dimensional array, without a set length.
     data *array;
@@ -33,7 +35,7 @@
         printf("%d %f\n", heightArray[i].time, heightArray[i].height);
     }
 
-    stringParths = parth_of_sensors("./data/");
+    stringParths = path_of_sensors("./data/");
 
     size = number_of_sensors("./data/");
 
@@ -164,12 +166,12 @@ data *array_from_file(char *filePath, int *size) {
     return array;
 }
 
-int number_of_sensors(char folderParth[1024]) {
+int number_of_sensors(char folderPath[1024]) {
     DIR *d;
     struct dirent *dir;
     int count = 0;
 
-    d = opendir(folderParth);
+    d = opendir(folderPath);
 
     if (d) {
         // Loops over all the files in the folder
@@ -185,14 +187,14 @@ int number_of_sensors(char folderParth[1024]) {
     return count;
 }
 
-sensor *parth_of_sensors(char folderParth[1024]) {
+sensor *path_of_sensors(char folderPath[1024]) {
     DIR *d;
     struct dirent *dir;
-    int size = number_of_sensors(folderParth);
+    int size = number_of_sensors(folderPath);
     sensor *parth = malloc(sizeof(sensor) * size);
     int i = 0;
 
-    d = opendir(folderParth);
+    d = opendir(folderPath);
 
     if (d) {
         // Loops over all the files in the folder
@@ -215,13 +217,13 @@ sensor *parth_of_sensors(char folderParth[1024]) {
 double avage_flow(int timePeriod, flow flowArray[]){
     //timePeriod in hours 
     int timeBetweenMeasurements = flowArray[1].time - flowArray[0].time; //In miliseconds
-    int measurementsPerHour = 1000 / timeBetweenMeasurements * 60 * 60;
-    int measurementsForPeriod = measurementsPerHour * timePeriod;
-    int arrayLength = sizeof(flow) / sizeof(flow[0])-1;
+    double measurementsPerHour = 60 / (timeBetweenMeasurements / 1000 / 60);
+    double measurementsForPeriod = measurementsPerHour * timePeriod;
+    int arrayLength = sizeof(flowArray)-1; // NOGET VIRKER IKKE - HVORFOR ER MIT ARRAY KUN 8? (CHANGE ME)
     double totalFlow = 0; 
     double averageFlow = 0;
 
-    for (int i = measurementsForPeriod; i > 0; i--){
+    for (int i = measurementsForPeriod; i >= 0; i--){
         totalFlow += flowArray[arrayLength-i].flow;
     }
 

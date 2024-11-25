@@ -36,10 +36,10 @@ flow *flow_array(data *dataArray, int size);
 height *height_array(flow *flowArray, int size);
 
 // This functio returns the number of sensors in a given folder
-int number_of_sensors(char folderParth[1024]);
+int number_of_sensors(char folderPath[1024]);
 
 // This function returns the id, parth and name of the sensors in a given folder
-sensor *parth_of_sensors(char folderParth[1024]);
+sensor *path_of_sensors(char folderPath[1024]);
 
 // ------ DONE ------ //
 

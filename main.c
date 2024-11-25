@@ -26,7 +26,7 @@ void sensor_menu() {
 
     // Uses functions from functions.h (number_of_sensors, and parth_of_sensors) 
     numberOfSensors = number_of_sensors("./data/");
-    sensor *sensor = parth_of_sensors("./data/");
+    sensor *sensor = path_of_sensors("./data/");
 
 // The code in the do-while loop runs until the conditions in the while-loop are fullfilled
     do {
@@ -73,10 +73,12 @@ void data_menu(int sensorChoice) {
         // Removes the input buffer
         while (getchar() != '\n');    
 
+        // CHANGE ME - Test array skal slettes
         flow arr[]={{0, 12},{300000, 10},{600000, 20}, {900000, 10}, {1200000, 5}, {1500000, 12}, {1800000, 8}, {2100000, 7}, {2400000, 13}, {2700000, 21}, {3000000, 24}, {3300000, 17}, {3600000, 15}};
 
         switch (choice) {
             case 1:
+                // CHANGE ME - Test af funktion hører ikke til her.
                 printf("%f", avage_flow(1, arr));
                 //water_level_graph(sensorChoice);
                 break;
