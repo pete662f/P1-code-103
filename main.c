@@ -9,6 +9,7 @@ void flow_graph(int sensorChoice);
 void set_water_level_alarm(int sensorChoice);
 void data_menu(int sensorChoice);
 void sensor_menu();
+double avage_flow(int timePeriod, flow flowArray[]);
 
 int main(void) {
     while (1) {
@@ -72,9 +73,12 @@ void data_menu(int sensorChoice) {
         // Removes the input buffer
         while (getchar() != '\n');    
 
+        flow arr[]={{0, 12},{300000, 10},{600000, 20}, {900000, 10}, {1200000, 5}, {1500000, 12}, {1800000, 8}, {2100000, 7}, {2400000, 13}, {2700000, 21}, {3000000, 24}, {3300000, 17}, {3600000, 15}};
+
         switch (choice) {
             case 1:
-                water_level_graph(sensorChoice);
+                printf("%f", avage_flow(1, arr));
+                //water_level_graph(sensorChoice);
                 break;
             case 2:
                 water_level_statistics(sensorChoice);

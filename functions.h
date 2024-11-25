@@ -44,7 +44,7 @@ sensor *parth_of_sensors(char folderParth[1024]);
 // ------ DONE ------ //
 
 // This function takes the avage flow in a given time
-double avage_flow(int startDateTime, int endDateTime, double *flowArray);
+double avage_flow(int timePeriod, flow flowArray[]);
 
 // This function gives the max flow in a given time
 double max_flow(int startDateTime, int endDateTime, double *flowArray);

@@ -4,6 +4,8 @@
 #include <dirent.h>
 #include "functions.h"
 
+#define ROTATION_FLOW (2.25 / 1000) // CHANGE ME TO CORRECT RORATION_FLOW IN LITER
+
 /*int main(void) {
     // Declare a two dimensional array, without a set length.
     data *array;
@@ -208,4 +210,22 @@ sensor *parth_of_sensors(char folderParth[1024]) {
     }
 
     return parth;
+}
+
+double avage_flow(int timePeriod, flow flowArray[]){
+    //timePeriod in hours 
+    int timeBetweenMeasurements = flowArray[1].time - flowArray[0].time; //In miliseconds
+    int measurementsPerHour = 1000 / timeBetweenMeasurements * 60 * 60;
+    int measurementsForPeriod = measurementsPerHour * timePeriod;
+    int arrayLength = sizeof(flow) / sizeof(flow[0])-1;
+    double totalFlow = 0; 
+    double averageFlow = 0;
+
+    for (int i = measurementsForPeriod; i > 0; i--){
+        totalFlow += flowArray[arrayLength-i].flow;
+    }
+
+    averageFlow = totalFlow / timePeriod;
+
+    return averageFlow;
 }
