@@ -212,13 +212,13 @@ sensor *path_of_sensors(char folderPath[1024]) {
     return parth;
 }
 
-double average_flow(int timePeriod, flow flowArray[]){
+double average_flow(int timePeriod, flow flowArray[], int arrayLength){
     //timePeriod in hours 
-    int timeBetweenMeasurements = flowArray[1].time - flowArray[0].time; //In miliseconds
+    int timeBetweenMeasurements = flowArray[1].time - flowArray[0].time; //In milliseconds
     double measurementsPerHour = 60 / (timeBetweenMeasurements / 1000 / 60);
     double measurementsForPeriod = measurementsPerHour * timePeriod;
-    int arrayLength = sizeof(flowArray)-1; // NOGET VIRKER IKKE - HVORFOR ER MIT ARRAY KUN 8? (CHANGE ME)
-    double totalFlow = 0; 
+    arrayLength -= 1;
+    double totalFlow = 0;
     double averageFlow = 0;
 
     for (int i = measurementsForPeriod; i >= 0; i--){
@@ -228,4 +228,20 @@ double average_flow(int timePeriod, flow flowArray[]){
     averageFlow = totalFlow / timePeriod;
 
     return averageFlow;
+}
+
+double min_max_flow(int timePeriod, int min_max_bit, flow flowArray[], int arrayLength) {
+    //Function assumes sorted flow array with the lowest flow value at index 0.
+    switch (min_max_bit) {
+        case 0:
+            return flowArray[0].flow;
+        case 1:
+            return flowArray[arrayLength-1].flow;
+        default:
+            return -1;
+    }
+}
+
+int comp_asc(const void *a, const void *b) {
+    return ((struct flow*)b) -> flow - ((struct flow*)a) -> flow;
 }

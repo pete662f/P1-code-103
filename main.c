@@ -9,7 +9,6 @@ void flow_graph(int sensorChoice);
 void set_water_level_alarm(int sensorChoice);
 void data_menu(int sensorChoice);
 void sensor_menu();
-double average_flow(int timePeriod, flow flowArray[]);
 
 int main(void) {
     while (1) {
@@ -71,16 +70,11 @@ void data_menu(int sensorChoice) {
         isValid = scanf(" %d", &choice);
 
         // Removes the input buffer
-        while (getchar() != '\n');    
-
-        // CHANGE ME - Test array skal slettes
-        flow arr[]={{0, 12},{300000, 10},{600000, 20}, {900000, 10}, {1200000, 5}, {1500000, 12}, {1800000, 8}, {2100000, 7}, {2400000, 13}, {2700000, 21}, {3000000, 24}, {3300000, 17}, {3600000, 15}};
+        while (getchar() != '\n');
 
         switch (choice) {
             case 1:
-                // CHANGE ME - Test af funktion hører ikke til her.
-                printf("%f", average_flow(1, arr));
-                //water_level_graph(sensorChoice);
+                water_level_graph(sensorChoice);
                 break;
             case 2:
                 water_level_statistics(sensorChoice);
@@ -107,8 +101,22 @@ void water_level_graph(int sensorChoice) {
 }
 
 void water_level_statistics(int sensorChoice) {
+    // CHANGE ME - Test array skal slettes -- Real array should be inputted to this function
+    flow arr[]={{0, 12},{300000, 10},{600000, 20}, {900000, 10}, {1200000, 5}, {1500000, 12}, {1800000, 8}, {2100000, 7}, {2400000, 13}, {2700000, 21}, {3000000, 24}, {3300000, 17}, {3600000, 15}};
+    int arrLength = sizeof(arr) / sizeof(arr[0]); //CHANGE ME: this should be inputted to this function together with the real array.
+
+    int timePeriod;
+    int isValid;
+    qsort(arr,arrLength,sizeof(flow), comp_asc);
+
     printf("Water Level Statistics, sensor %d\n", sensorChoice);
-    // Code here
+    do {
+        printf("Please input number of hours to include data from: ");
+        isValid = scanf(" %d", &timePeriod);
+    } while (timePeriod < 0 || timePeriod > 3600 || !isValid);
+    printf("The average flow is %f mL/hour\n", average_flow(timePeriod, arr, arrLength));
+    printf("The minimum flow was: %f\n", min_max_flow(timePeriod, 1, arr, arrLength));
+    printf("The maximum flow was: %f\n", min_max_flow(timePeriod, 0, arr, arrLength));
 }
 
 void flow_graph(int sensorChoice) {

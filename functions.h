@@ -35,22 +35,22 @@ flow *flow_array(data *dataArray, int size);
 // This function calculates the height of the water using the formula h=(Q^2)/(2*g*A^2)
 height *height_array(flow *flowArray, int size);
 
-// This functio returns the number of sensors in a given folder
+// This function returns the number of sensors in a given folder
 int number_of_sensors(char folderPath[1024]);
 
-// This function returns the id, parth and name of the sensors in a given folder
+// This function returns the id, path and name of the sensors in a given folder
 sensor *path_of_sensors(char folderPath[1024]);
 
+//Compares Flow array and return lowest flow value at index 0.
+int comp_asc(const void *, const void *);
+
+// This function takes the average flow in a given time
+double average_flow(int timePeriod, flow flowArray[], int arrayLength);
+
+// This function gives the max or min flow in a given time
+double min_max_flow(int timePeriod, int min_max_bit, flow flowArray[], int arrayLength);
+
 // ------ DONE ------ //
-
-// This function takes the avage flow in a given time
-double average_flow(int timePeriod, flow flowArray[]);
-
-// This function gives the max flow in a given time
-double max_flow(int startDateTime, int endDateTime, double *flowArray);
-
-// This function gives the min flow in a given time
-double min_flow(int startDateTime, int endDateTime, double *flowArray);
 
 // This function outputs an array with the start and end dateTime of flow beieng above threshold overflowArray[overflowStartDateTime,overflowEndDateTime]
 double *overflow_accurencens(int startDateTime, int endDateTime, double threshold, double *flowArray);
