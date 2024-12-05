@@ -4,6 +4,10 @@
 #include "functions.h"
 #include <time.h>
 
+#define SENSOR_1_THRESHOLD 10.0
+#define SENSOR_2_THRESHOLD 15.0
+#define SENSOR_3_THRESHOLD 20.0
+
 void water_level_graph(int sensorChoice);
 void water_level_statistics(int sensorChoice);
 void flow_graph(int sensorChoice);
@@ -124,10 +128,6 @@ void flow_graph(int sensorChoice) {
     printf("Flow Graph, sensor %d\n", sensorChoice);
     // Code here
 }
-
-#define SENSOR_1_THRESHOLD 10.0
-#define SENSOR_2_THRESHOLD 15.0
-#define SENSOR_3_THRESHOLD 20.0
 
 void set_water_level_alarm(int sensorChoice) {
     // CHANGE ME - Test array skal slettes -- Real array should be inputted to this function
