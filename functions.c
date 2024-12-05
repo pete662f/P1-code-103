@@ -245,3 +245,51 @@ double min_max_flow(int timePeriod, int min_max_bit, flow flowArray[], int array
 int comp_asc(const void *a, const void *b) {
     return ((struct flow*)b) -> flow - ((struct flow*)a) -> flow;
 }
+
+int count_alarms(height *heightArray, int size, time_t interval, float threshold) {
+    int count = 0;
+    time_t currentTime = time(NULL);
+    time_t startTime = currentTime - interval;
+
+    for (int i = 0; i < size; i++) {
+        if (heightArray[i].time >= startTime && heightArray[i].height > threshold) {
+            count++;
+        }
+    }
+    return count;
+}
+
+/*
+overflow_period *overflow_occurrences(height *heightArray, int size, float threshold, int *overflowCount) {
+    overflow_period *overflowArray = malloc(sizeof(overflow_period) * size);
+    int count = 0;
+    int inOverflow = 0;
+    time_t start = 0;
+
+    for (int i = 0; i < size; i++) {
+        if (heightArray[i].height > threshold) {
+            if (!inOverflow) {
+                start = heightArray[i].time;
+                inOverflow = 1;
+            }
+        } else {
+            if (inOverflow) {
+                overflowArray[count].start = start;
+                overflowArray[count].end = heightArray[i].time;
+                count++;
+                inOverflow = 0;
+            }
+        }
+    }
+
+    // If the last period is still in overflow
+    if (inOverflow) {
+        overflowArray[count].start = start;
+        overflowArray[count].end = heightArray[size - 1].time;
+        count++;
+    }
+
+    *overflowCount = count;
+    return overflowArray;
+}
+*/

@@ -6,6 +6,8 @@ struct data {
 struct flow {
     int time;
     double flow;
+    double total_quantity;
+    double pulsecount;
 };
 
 struct height {
@@ -19,10 +21,16 @@ struct sensor {
     char parth[1024];
 };
 
+struct overflow_period {
+    int start;
+    int end;
+};
+
 typedef struct data data;
 typedef struct flow flow;
 typedef struct height height;
 typedef struct sensor sensor;
+typedef struct overflow_period overflow_period;
 
 // ------ DONE ------ //
 
@@ -55,5 +63,5 @@ double min_max_flow(int timePeriod, int min_max_bit, flow flowArray[], int array
 // This function outputs an array with the start and end dateTime of flow beieng above threshold overflowArray[overflowStartDateTime,overflowEndDateTime]
 double *overflow_accurencens(int startDateTime, int endDateTime, double threshold, double *flowArray);
 
-// Coud use https://gr-framework.org/c.html for drawing graphs or 
+// Could use https://gr-framework.org/c.html for drawing graphs or 
 void draw_graph(double *array);

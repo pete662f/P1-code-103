@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <strings.h>
 #include "functions.h"
+#include <time.h>
 
 void water_level_graph(int sensorChoice);
 void water_level_statistics(int sensorChoice);
@@ -124,8 +125,111 @@ void flow_graph(int sensorChoice) {
     // Code here
 }
 
+#define SENSOR_1_THRESHOLD 10.0
+#define SENSOR_2_THRESHOLD 15.0
+#define SENSOR_3_THRESHOLD 20.0
+
 void set_water_level_alarm(int sensorChoice) {
+    // CHANGE ME - Test array skal slettes -- Real array should be inputted to this function
+    flow arr[] = {{0, 12}, {300000, 10}, {600000, 20}, {900000, 10}, {1200000, 5}, {1500000, 12}, {1800000, 8}, {2100000, 7}, {2400000, 13}, {2700000, 21}, {3000000, 24}, {3300000, 17}, {3600000, 15}};
+    int arrLength = sizeof(arr) / sizeof(arr[0]); // CHANGE ME: this should be inputted to this function together with the real array.
+
+    int timePeriod;
+    int isValid;
+
     printf("Set Water Level Alarm, sensor %d\n", sensorChoice);
-    // Code here
+    do {
+        printf("Please input number of hours to include data from: ");
+        isValid = scanf(" %d", &timePeriod);
+    } while (timePeriod < 0 || timePeriod > 3600 || !isValid);
+
+    time_t currentTime = time(NULL);
+    time_t interval = currentTime - (timePeriod * 3600);
+
+    height *heightArray = height_array(arr, arrLength);
+    float threshold;
+    int totalAlarms = 0;
+
+    if (sensorChoice == 0) {
+        // Check all sensors
+        for (int i = 1; i <= 3; i++) {
+            switch (i) {
+                case 1:
+                    threshold = SENSOR_1_THRESHOLD;
+                    break;
+                case 2:
+                    threshold = SENSOR_2_THRESHOLD;
+                    break;
+                case 3:
+                    threshold = SENSOR_3_THRESHOLD;
+                    break;
+            }
+            totalAlarms += count_alarms(heightArray, arrLength, interval, threshold);
+        }
+        printf("Total number of alarms in the last %d hours for all sensors: %d\n", timePeriod, totalAlarms);
+    } else {
+        // Check specific sensor
+        switch (sensorChoice) {
+            case 1:
+                threshold = SENSOR_1_THRESHOLD;
+                break;
+            case 2:
+                threshold = SENSOR_2_THRESHOLD;
+                break;
+            case 3:
+                threshold = SENSOR_3_THRESHOLD;
+                break;
+            default:
+                printf("Invalid sensor choice\n");
+                free(heightArray);
+                return;
+        }
+    int alarmCount = count_alarms(heightArray, arrLength, interval, threshold);
+    printf("Number of alarms in the last %d hour(s): %d\n", timePeriod, alarmCount);
+    }
+
+    free(heightArray);
 }
 
+flow *read_data(const char *filename, int *size) {
+    FILE *file = fopen(filename, "r");
+    if (!file) {
+        perror("Failed to open file");
+        exit(EXIT_FAILURE);
+    }
+
+    int capacity = 10;
+    flow *data = malloc(capacity * sizeof(flow));
+    if (!data) {
+        perror("Failed to allocate memory");
+        exit(EXIT_FAILURE);
+    }
+
+    int count = 0;
+    while (fscanf(file, "%f %f", &data[count].pulsecount, &data[count].time) == 2) {
+        data[count].time = time(NULL); // Assign current time for simplicity
+        count++;
+        if (count >= capacity) {
+            capacity *= 2;
+            data = realloc(data, capacity * sizeof(flow));
+            if (!data) {
+                perror("Failed to reallocate memory");
+                exit(EXIT_FAILURE);
+            }
+        }
+    }
+
+   // int flowRate = ((1000.0 / time) * pulsecount) / 4.5;
+
+    fclose(file);
+    *size = count;
+    return data;
+}
+
+void current_time(flow *data, int size) {
+    time_t currentTime = time(NULL);
+    printf("Current time: %s", ctime(&currentTime));
+    if (size > 0) {
+        printf("Last data point time: %s", ctime(&data[size - 1].time));
+    }
+}
