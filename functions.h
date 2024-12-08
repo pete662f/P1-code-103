@@ -1,17 +1,19 @@
+#include <time.h>
+
 struct data {
-    int time;
+    long time; // Time in seconds
     int rotations;
 };
 
 struct flow {
-    int time;
+    time_t timestamp; // Timestamp provided by the Arduino
     double flow;
     double total_quantity;
     double pulsecount;
 };
 
 struct height {
-    int time;
+    time_t timestamp; // Timestamp provided by the Arduino
     double height;
 };
 
@@ -22,8 +24,8 @@ struct sensor {
 };
 
 struct overflow_period {
-    int start;
-    int end;
+    time_t start;
+    time_t end;
 };
 
 typedef struct data data;
@@ -60,8 +62,11 @@ double min_max_flow(int timePeriod, int min_max_bit, flow flowArray[], int array
 
 // ------ DONE ------ //
 
-// This function outputs an array with the start and end dateTime of flow beieng above threshold overflowArray[overflowStartDateTime,overflowEndDateTime]
-double *overflow_accurencens(int startDateTime, int endDateTime, double threshold, double *flowArray);
+// This function determines the overflow occurrences based on the threshold in a given time
+overflow_period *overflow_occurrences(height *heightArray, int size, float threshold, int *overflowCount);
+
+// this function reads the data from data.txt and stores it in a flow array
+flow *read_data(const char *filename, int *size);
 
 // Could use https://gr-framework.org/c.html for drawing graphs or 
 void draw_graph(double *array);

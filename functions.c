@@ -3,6 +3,7 @@
 #include <strings.h>
 #include <dirent.h>
 #include "functions.h"
+#include <time.h>
 
 #define ROTATION_FLOW (2.25 / 1000) // CHANGE ME TO CORRECT RORATION_FLOW IN LITER
 
@@ -62,7 +63,7 @@ flow *flow_array(data *dataArray, int size) {
 
     // Calculates the flow using Q=dv/dt for each time
     for (int i = 0; i < size; i++) {
-        flowArray[i].time = (double)dataArray[i].time;
+        flowArray[i].timestamp = (double)dataArray[i].time;
 
         // Calculate the time difference between the current and previous time.
         if (i > 0) {
@@ -93,7 +94,7 @@ height *height_array(flow *flowArray, int size) {
     for (int i = 0; i < size; i++)
     {
         // Copying the time from the flowArray to the heightArray
-        heightArray[i].time = flowArray[i].time;
+        heightArray[i].timestamp = flowArray[i].timestamp;
 
         // Calculating the height of the water
         Q=flowArray[i].flow;
@@ -214,7 +215,7 @@ sensor *path_of_sensors(char folderPath[1024]) {
 
 double average_flow(int timePeriod, flow flowArray[], int arrayLength){
     //timePeriod in hours 
-    int timeBetweenMeasurements = flowArray[1].time - flowArray[0].time; //In milliseconds
+    int timeBetweenMeasurements = flowArray[1].timestamp - flowArray[0].timestamp; //In milliseconds
     double measurementsPerHour = 60 / (timeBetweenMeasurements / 1000 / 60);
     double measurementsForPeriod = measurementsPerHour * timePeriod;
     arrayLength -= 1;
@@ -252,14 +253,13 @@ int count_alarms(height *heightArray, int size, time_t interval, float threshold
     time_t startTime = currentTime - interval;
 
     for (int i = 0; i < size; i++) {
-        if (heightArray[i].time >= startTime && heightArray[i].height > threshold) {
+        if (heightArray[i].timestamp >= startTime && heightArray[i].height > threshold) {
             count++;
         }
     }
     return count;
 }
 
-/*
 overflow_period *overflow_occurrences(height *heightArray, int size, float threshold, int *overflowCount) {
     overflow_period *overflowArray = malloc(sizeof(overflow_period) * size);
     int count = 0;
@@ -269,13 +269,13 @@ overflow_period *overflow_occurrences(height *heightArray, int size, float thres
     for (int i = 0; i < size; i++) {
         if (heightArray[i].height > threshold) {
             if (!inOverflow) {
-                start = heightArray[i].time;
+                start = heightArray[i].timestamp;
                 inOverflow = 1;
             }
         } else {
             if (inOverflow) {
                 overflowArray[count].start = start;
-                overflowArray[count].end = heightArray[i].time;
+                overflowArray[count].end = heightArray[i].timestamp;
                 count++;
                 inOverflow = 0;
             }
@@ -285,11 +285,10 @@ overflow_period *overflow_occurrences(height *heightArray, int size, float thres
     // If the last period is still in overflow
     if (inOverflow) {
         overflowArray[count].start = start;
-        overflowArray[count].end = heightArray[size - 1].time;
+        overflowArray[count].end = heightArray[size - 1].timestamp;
         count++;
     }
 
     *overflowCount = count;
     return overflowArray;
 }
-*/
