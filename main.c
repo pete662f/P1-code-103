@@ -4,9 +4,11 @@
 #include "functions.h"
 #include <time.h>
 
-#define SENSOR_1_THRESHOLD 10.0
-#define SENSOR_2_THRESHOLD 15.0
-#define SENSOR_3_THRESHOLD 20.0
+#define SENSOR_1_THRESHOLD 0.5
+#define SENSOR_2_THRESHOLD 1.0
+#define SENSOR_3_THRESHOLD 1.5
+
+time_t reference_start_time;
 
 void water_level_graph(int sensorChoice);
 void water_level_statistics(int sensorChoice);
@@ -16,6 +18,7 @@ void data_menu(int sensorChoice);
 void sensor_menu();
 
 int main(void) {
+    reference_start_time = time(NULL); // Set the reference start time
     while (1) {
         sensor_menu(); 
     } 
@@ -164,7 +167,7 @@ void set_water_level_alarm(int sensorChoice) {
     int totalAlarms = 0;
 
     if (sensorChoice == 0) {
-        // Check all sensors
+        //Check all sensors
         for (int i = 1; i <= 3; i++) {
             switch (i) {
                 case 1:
@@ -177,17 +180,23 @@ void set_water_level_alarm(int sensorChoice) {
                     threshold = SENSOR_3_THRESHOLD;
                     break;
             }
-            printf("Checking sensor %d with threshold %f\n", i, threshold);
+            printf("Checking sensor %d with threshold %g\n", i, threshold);
             overflowArray = overflow_occurrences(heightArray, size, threshold, &overflowCount);
             totalAlarms += overflowCount;
-            printf("Overflow periods for sensor %d:\n", i);
-            for (int j = 0; j < overflowCount; j++) {
-                printf("Start: %s", ctime(&overflowArray[j].start));
-                printf("End: %s", ctime(&overflowArray[j].end));
+            printf("Overflow periods for sensor %d: ", i);
+            if (overflowCount == 0) {
+                printf("0\n");
+            } else {
+                printf("\n");
+                for (int j = 0; j < overflowCount; j++) {
+                    printf("Start: %s", ctime(&overflowArray[j].start));
+                    printf("End: %s", ctime(&overflowArray[j].end));
+                }
             }
             free(overflowArray);
         }
     } else {
+        //Check specific sensor
         switch (sensorChoice) {
             case 1:
                 threshold = SENSOR_1_THRESHOLD;
@@ -208,15 +217,20 @@ void set_water_level_alarm(int sensorChoice) {
         printf("Checking sensor %d with threshold %g\n", sensorChoice, threshold);
         overflowArray = overflow_occurrences(heightArray, size, threshold, &overflowCount);
         totalAlarms = overflowCount;
-        printf("Overflow periods for sensor %d:\n", sensorChoice);
-        for (int i = 0; i < overflowCount; i++) {
-            printf("Start: %s", ctime(&overflowArray[i].start));
-            printf("End: %s", ctime(&overflowArray[i].end));
+        printf("Overflow periods for sensor %d: ", sensorChoice);
+        if (overflowCount == 0) {
+            printf("0\n");
+        } else {
+            printf("\n");
+            for (int i = 0; i < overflowCount; i++) {
+                printf("Start: %s", ctime(&overflowArray[i].start));
+                printf("End: %s", ctime(&overflowArray[i].end));
+            }
         }
         free(overflowArray);
     }
 
-    printf("Total number of alarms in the last %d hour(s): %d\n", timePeriod, totalAlarms);
+    printf("Total number of alarms: %d\n", totalAlarms);
 
     free(heightArray);
     free(arr);
@@ -239,7 +253,7 @@ flow *read_data(const char *filename, int *size) {
     int count = 0;
     long time;
     while (fscanf(file, "%lf %ld", &data[count].pulsecount, &time) == 2) {
-        data[count].timestamp = time; // Use the time from the file
+        data[count].timestamp = reference_start_time + (time / 1000); // Convert milliseconds to seconds and add to reference start time
         data[count].total_quantity = time; // Assuming total_quantity is the time in milliseconds
         data[count].flow = ((1000.0 / data[count].total_quantity) * data[count].pulsecount) / 4.5;
         count++;
