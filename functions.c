@@ -140,8 +140,7 @@ data *array_from_file(char *filePath, int *size, time_t reference_start_time) {
         fgets(line, sizeof(line), file);
         // sscanf is used to read formatted input from a string.
         sscanf(line, "%d %d", &time, &rotations);
-        printf("reference_start_time: %ld\n", reference_start_time);
-        printf("Time: %d, Rotations: %d\n", time, rotations);
+        
         array[i].timestamp = reference_start_time + (time / 1000); // Convert milliseconds to seconds and add to reference start time;
         array[i].rotations = rotations;
     }

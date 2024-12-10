@@ -147,14 +147,14 @@ void set_water_level_alarm(int sensorChoice) {
     } while (timePeriod < 0 || timePeriod > 3600 || !isValid);
 
     do {
-        printf("Please set the: threshold: ");
+        printf("Please set the threshold: ");
         isValid = scanf(" %lf", &threshold);
     } while (threshold < 0 || !isValid);
 
     int overflowCount = 0;
     overflow_period *overflowArray;
     
-    overflowArray = overflow_occurrences_id(sensorChoice, threshold, &overflowCount, reference_start_time);
+    overflowArray = overflow_occurrences_id(sensorChoice-1, threshold, &overflowCount, reference_start_time); // sensorChoice-1 because the sensor id starts at 0
 
     printf("Checking sensor %d with threshold %f\n", sensorChoice, threshold);
     printf("Overflow periods for sensor %d: ", sensorChoice);
