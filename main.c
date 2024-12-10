@@ -147,7 +147,6 @@ void flow_graph(int sensorChoice) {
 
 void set_water_level_alarm(int sensorChoice) {
     double threshold;
-    int size;
     int timePeriod;
     int isValid;
 
@@ -161,9 +160,6 @@ void set_water_level_alarm(int sensorChoice) {
         printf("Please set the: threshold: ");
         isValid = scanf(" %lf", &threshold);
     } while (threshold < 0 || !isValid);
-
-    time_t currentTime = time(NULL);
-    time_t interval = currentTime - (timePeriod * 3600);
 
     int overflowCount = 0;
     overflow_period *overflowArray;
