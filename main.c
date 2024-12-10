@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <strings.h>
 #include "functions.h"
-#include <time.h>
 
 #define SENSOR_1_THRESHOLD 0.5
 #define SENSOR_2_THRESHOLD 1.0
@@ -45,7 +44,7 @@ void sensor_menu() {
 // The code in the do-while loop runs until the conditions in the while-loop are fullfilled
     do {
         printf("\n--- Sensor Menu ---\n");
-        printf("0. All sensors\n");
+        printf("0. Exit the program\n");
 
         for (int i = 0; i < numberOfSensors; i++) {
             char *pch;
@@ -53,6 +52,8 @@ void sensor_menu() {
             pch = strtok(sensor[i].name,".");
             printf("%d. %s\n", i + 1, pch);
         }
+
+        
 
         printf("Choose sensor: ");
         isValid = scanf(" %d", &choice);
@@ -76,11 +77,11 @@ void data_menu(int sensorChoice) {
     
     do {
         printf("\n--- Data Menu ---\n");
-        printf("1: Water level graph\n");
-        printf("2: Water level Statistics\n");
-        printf("3: Flow graph\n");
-        printf("4: Set water level alarm\n");
-        printf("0: Exit the program\n");
+        printf("0. Exit the program\n");
+        printf("1. Water level graph\n");
+        printf("2. Water level Statistics\n");
+        printf("3. Flow graph\n");
+        printf("4. Set water level alarm\n");
         printf("Choose where you want to go: ");
         isValid = scanf(" %d", &choice);
 
@@ -132,6 +133,15 @@ void water_level_statistics(int sensorChoice) {
     qsort(arr,arrLength,sizeof(flow), comp_asc);
     printf("The minimum flow was: %f\n", min_max_flow(timePeriod, 1, arr, arrLength));
     printf("The maximum flow was: %f\n", min_max_flow(timePeriod, 0, arr, arrLength));
+
+    free(arr);
+
+    // Clear input buffer
+    while( getchar() != '\n' );
+
+    // Wait for user to press enter
+    printf("\nPress Enter to Continue...");
+    while( getchar() != '\n' );
 }
 
 void flow_graph(int sensorChoice) {
@@ -140,9 +150,8 @@ void flow_graph(int sensorChoice) {
 }
 
 void set_water_level_alarm(int sensorChoice) {
+    double threshold;
     int size;
-    flow *arr = read_data("data.txt", &size);
-
     int timePeriod;
     int isValid;
 
@@ -152,83 +161,44 @@ void set_water_level_alarm(int sensorChoice) {
         isValid = scanf(" %d", &timePeriod);
     } while (timePeriod < 0 || timePeriod > 3600 || !isValid);
 
+    do {
+        printf("Please set the: threshold: ");
+        isValid = scanf(" %lf", &threshold);
+    } while (threshold < 0 || !isValid);
+
     time_t currentTime = time(NULL);
     time_t interval = currentTime - (timePeriod * 3600);
 
-    height *heightArray = height_array(arr, size);
-    float threshold;
     int overflowCount = 0;
     overflow_period *overflowArray;
     int totalAlarms = 0;
+    
+    overflowArray = overflow_occurrences_id(sensorChoice, threshold, &overflowCount);
 
-    if (sensorChoice == 0) {
-        //Check all sensors
-        for (int i = 1; i <= 3; i++) {
-            switch (i) {
-                case 1:
-                    threshold = SENSOR_1_THRESHOLD;
-                    break;
-                case 2:
-                    threshold = SENSOR_2_THRESHOLD;
-                    break;
-                case 3:
-                    threshold = SENSOR_3_THRESHOLD;
-                    break;
-            }
-            printf("Checking sensor %d with threshold %g\n", i, threshold);
-            overflowArray = overflow_occurrences(heightArray, size, threshold, &overflowCount);
-            totalAlarms += overflowCount;
-            printf("Overflow periods for sensor %d: ", i);
-            if (overflowCount == 0) {
-                printf("0\n");
-            } else {
-                printf("\n");
-                for (int j = 0; j < overflowCount; j++) {
-                    printf("Start: %s", ctime(&overflowArray[j].start));
-                    printf("End: %s", ctime(&overflowArray[j].end));
-                }
-            }
-            free(overflowArray);
-        }
+    printf("Checking sensor %d with threshold %f\n", sensorChoice, threshold);
+    totalAlarms = overflowCount;
+
+    printf("Overflow periods for sensor %d: ", sensorChoice);
+
+    if (overflowCount == 0) {
+        printf("0\n");
     } else {
-        //Check specific sensor
-        switch (sensorChoice) {
-            case 1:
-                threshold = SENSOR_1_THRESHOLD;
-                break;
-            case 2:
-                threshold = SENSOR_2_THRESHOLD;
-                break;
-            case 3:
-                threshold = SENSOR_3_THRESHOLD;
-                break;
-            default:
-                printf("Invalid sensor choice\n");
-                free(heightArray);
-                free(arr);
-                return;
+        printf("\n");
+        for (int i = 0; i < overflowCount; i++) {
+            printf("Start: %s", ctime(&overflowArray[i].start));
+            printf("End: %s", ctime(&overflowArray[i].end));
         }
-
-        printf("Checking sensor %d with threshold %g\n", sensorChoice, threshold);
-        overflowArray = overflow_occurrences(heightArray, size, threshold, &overflowCount);
-        totalAlarms = overflowCount;
-        printf("Overflow periods for sensor %d: ", sensorChoice);
-        if (overflowCount == 0) {
-            printf("0\n");
-        } else {
-            printf("\n");
-            for (int i = 0; i < overflowCount; i++) {
-                printf("Start: %s", ctime(&overflowArray[i].start));
-                printf("End: %s", ctime(&overflowArray[i].end));
-            }
-        }
-        free(overflowArray);
     }
+    free(overflowArray);
 
     printf("Total number of alarms: %d\n", totalAlarms);
 
-    free(heightArray);
-    free(arr);
+    // Clear input buffer
+    while( getchar() != '\n' );
+
+    // Wait for user to press enter
+    printf("\nPress Enter to Continue...");
+    while( getchar() != '\n' );
 }
 
 flow *read_data(const char *filename, int *size) {
@@ -266,13 +236,3 @@ flow *read_data(const char *filename, int *size) {
     *size = count;
     return data;
 }
-
-/*
-void current_time(flow *data, int size) {
-    time_t currentTime = time(NULL);
-    printf("Current time: %s", ctime(&currentTime));
-    if (size > 0) {
-        printf("Last data point time: %s", ctime(&data[size - 1].timestamp));
-    }
-}
-*/
