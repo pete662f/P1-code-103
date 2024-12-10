@@ -1,5 +1,7 @@
 #include <time.h>
 
+#define MAX_SIZE 1024
+
 struct data {
     time_t timestamp; // Time in seconds
     int rotations;
@@ -19,8 +21,8 @@ struct height {
 
 struct sensor {
     int id;
-    char name[1024];
-    char path[1024];
+    char name[MAX_SIZE];
+    char path[MAX_SIZE];
 };
 
 struct overflow_period {
@@ -44,10 +46,10 @@ flow *flow_array(data *dataArray, int size);
 height *height_array(flow *flowArray, int size);
 
 // This function returns the number of sensors in a given folder
-int number_of_sensors(char folderPath[1024]);
+int number_of_sensors(char folderPath[MAX_SIZE]);
 
 // This function returns the id, path and name of the sensors in a given folder
-sensor *path_of_sensors(char folderPath[1024]);
+sensor *path_of_sensors(char folderPath[MAX_SIZE]);
 
 //Compares Flow array and return lowest flow value at index 0.
 int comp_asc(const void *, const void *);

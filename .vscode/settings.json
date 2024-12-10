@@ -1,6 +1,8 @@
 {
     "files.associations": {
         "dirent.h": "c",
-        "__locale": "c"
+        "__locale": "c",
+        "time.h": "c",
+        "functions.h": "c"
     }
 }

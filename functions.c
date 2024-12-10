@@ -2,13 +2,12 @@
 #include <stdlib.h>
 #include <strings.h>
 #include <dirent.h>
-#include "functions.h"
 #include <time.h>
+#include "functions.h"
 
-#define ROTATION_FLOW (2.25 / 1000) // CHANGE ME TO CORRECT RORATION_FLOW IN LITER
 
 flow *flow_from_id(int id, int *size, time_t reference_start_time) {
-    char filePath[1024];
+    char filePath[MAX_SIZE];
     sensor *sensors = path_of_sensors("./data/");
     sprintf(filePath, "./data/%s", sensors[id].path);
     free(sensors);
@@ -34,7 +33,6 @@ overflow_period *overflow_occurrences_id(int id, float threshold, int *overflowC
 }
 
 flow *flow_array(data *dataArray, int size) {
-    // We have to double the size of the malloc because we will have two doubles in each index.
     flow *flowArray = malloc(sizeof(flow) * size);
     double V = 0.1; // TODO: CHANGE ME 
     double deltaTime;
@@ -150,7 +148,7 @@ data *array_from_file(char *filePath, int *size, time_t reference_start_time) {
     return array;
 }
 
-int number_of_sensors(char folderPath[1024]) {
+int number_of_sensors(char folderPath[MAX_SIZE]) {
     DIR *d;
     struct dirent *dir;
     int count = 0;
@@ -171,7 +169,7 @@ int number_of_sensors(char folderPath[1024]) {
     return count;
 }
 
-sensor *path_of_sensors(char folderPath[1024]) {
+sensor *path_of_sensors(char folderPath[MAX_SIZE]) {
     DIR *d;
     struct dirent *dir;
     int size = number_of_sensors(folderPath);
