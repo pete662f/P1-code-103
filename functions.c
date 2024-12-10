@@ -5,7 +5,6 @@
 #include <time.h>
 #include "functions.h"
 
-
 flow *flow_from_id(int id, int *size, time_t reference_start_time) {
     char filePath[MAX_SIZE];
     sensor *sensors = path_of_sensors("./data/");
@@ -34,7 +33,7 @@ overflow_period *overflow_occurrences_id(int id, float threshold, int *overflowC
 
 flow *flow_array(data *dataArray, int size) {
     flow *flowArray = malloc(sizeof(flow) * size);
-    double V = 0.1; // TODO: CHANGE ME 
+    const double V = 0.1; // TODO: CHANGE ME 
     double deltaTime;
 
     // Validate the initialization of the array.
@@ -63,8 +62,8 @@ flow *flow_array(data *dataArray, int size) {
     
 height *height_array(flow *flowArray, int size) {
     height *heightArray = malloc(sizeof(height) * size);
-    double g = 9.81; // Gravitational acceleration constant
-    double A = 0.1; // TODO: CHANGE ME
+    const double g = 9.81; // Gravitational acceleration constant
+    const double A = 0.1; // TODO: CHANGE ME
     double Q; // Volematric flow rate
 
     // Validate the initialization of the array.
@@ -96,7 +95,7 @@ data *array_from_file(char *filePath, int *size, time_t reference_start_time) {
     FILE *file = fopen(filePath, "r");
 
     // Buffer to store the lines.
-    char line[25];
+    char line[MAX_BUFFER];
 
     // Validate the opening of the file.
     if (file == NULL) {

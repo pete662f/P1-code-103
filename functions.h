@@ -1,6 +1,7 @@
 #include <time.h>
 
 #define MAX_SIZE 1024
+#define MAX_BUFFER 64
 
 struct data {
     time_t timestamp; // Time in seconds

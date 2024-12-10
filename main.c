@@ -62,6 +62,11 @@ void sensor_menu(void) {
     
     free(sensor);
 
+    if (choice == 0) {
+        printf("Exiting program\n");
+        exit(EXIT_SUCCESS);
+    }
+
     data_menu(choice);
 }
 
