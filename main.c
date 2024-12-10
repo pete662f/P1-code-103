@@ -116,17 +116,12 @@ void water_level_graph(int sensorChoice) {
 }
 
 void water_level_statistics(int sensorChoice) {
-    // CHANGE ME - Test array skal slettes -- Real array should be inputted to this function
-    flow arr[]={{0, 12},{300000, 10},{600000, 20}, {900000, 10}, {1200000, 5}, {1500000, 12}, {1800000, 8}, {2100000, 7}, {2400000, 13}, {2700000, 21}, {3000000, 24}, {3300000, 17}, {3600000, 15}};
-    int arrLength = sizeof(arr) / sizeof(arr[0]); //CHANGE ME: this should be inputted to this function together with the real array.
-
-    /* for reading directly off the data file:
-    int size;
-    flow *arr = read_data("data.txt", &size);
-    */
-
+    int arrLength;
     int timePeriod;
     int isValid;
+
+    // sensorChoice-1 because the sensor id starts at 0
+    flow *arr = flow_from_id(sensorChoice-1, &arrLength);
 
     printf("Water Level Statistics, sensor %d\n", sensorChoice);
     do {
