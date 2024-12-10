@@ -118,7 +118,7 @@ void water_level_statistics(int sensorChoice) {
     int isValid;
 
     // sensorChoice-1 because the sensor id starts at 0
-    flow *arr = flow_from_id(sensorChoice-1, &arrLength);
+    flow *arr = flow_from_id(sensorChoice-1, &arrLength, reference_start_time);
 
     printf("Water Level Statistics, sensor %d\n", sensorChoice);
     do {
@@ -163,13 +163,10 @@ void set_water_level_alarm(int sensorChoice) {
 
     int overflowCount = 0;
     overflow_period *overflowArray;
-    int totalAlarms = 0;
     
-    overflowArray = overflow_occurrences_id(sensorChoice, threshold, &overflowCount);
+    overflowArray = overflow_occurrences_id(sensorChoice, threshold, &overflowCount, reference_start_time);
 
     printf("Checking sensor %d with threshold %f\n", sensorChoice, threshold);
-    totalAlarms = overflowCount;
-
     printf("Overflow periods for sensor %d: ", sensorChoice);
 
     if (overflowCount == 0) {
@@ -183,7 +180,7 @@ void set_water_level_alarm(int sensorChoice) {
     }
     free(overflowArray);
 
-    printf("Total number of alarms: %d\n", totalAlarms);
+    printf("Total number of alarms: %d\n", overflowCount);
 
     // Clear input buffer
     while( getchar() != '\n' );
@@ -191,40 +188,4 @@ void set_water_level_alarm(int sensorChoice) {
     // Wait for user to press enter
     printf("\nPress Enter to Continue...");
     while( getchar() != '\n' );
-}
-
-flow *read_data(const char *filename, int *size) {
-    FILE *file = fopen(filename, "r");
-    if (!file) {
-        perror("Failed to open file");
-        exit(EXIT_FAILURE);
-    }
-
-    int capacity = 10;
-    flow *data = malloc(capacity * sizeof(flow));
-    if (!data) {
-        perror("Failed to allocate memory");
-        exit(EXIT_FAILURE);
-    }
-
-    int count = 0;
-    long time;
-    while (fscanf(file, "%lf %ld", &data[count].pulsecount, &time) == 2) {
-        data[count].timestamp = reference_start_time + (time / 1000); // Convert milliseconds to seconds and add to reference start time
-        data[count].total_quantity = time; // Assuming total_quantity is the time in milliseconds
-        data[count].flow = ((1000.0 / data[count].total_quantity) * data[count].pulsecount) / 4.5;
-        count++;
-        if (count >= capacity) {
-            capacity *= 2;
-            data = realloc(data, capacity * sizeof(flow));
-            if (!data) {
-                perror("Failed to reallocate memory");
-                exit(EXIT_FAILURE);
-            }
-        }
-    }
-
-    fclose(file);
-    *size = count;
-    return data;
 }

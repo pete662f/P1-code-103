@@ -1,7 +1,7 @@
 #include <time.h>
 
 struct data {
-    long time; // Time in seconds
+    time_t timestamp; // Time in seconds
     int rotations;
 };
 
@@ -34,10 +34,8 @@ typedef struct height height;
 typedef struct sensor sensor;
 typedef struct overflow_period overflow_period;
 
-// ------ DONE ------ //
-
 // This function reads the data from a file and stores it in a two dimensional array.
-data *array_from_file(char *filePath, int *size);
+data *array_from_file(char *filePath, int *size, time_t reference_start_time);
 
 // This function calculates the flow rate using the formula Q=dv/dt
 flow *flow_array(data *dataArray, int size);
@@ -61,17 +59,13 @@ double average_flow(int timePeriod, flow flowArray[], int arrayLength);
 double min_max_flow(int timePeriod, int min_max_bit, flow flowArray[], int arrayLength);
 
 // This function returns the flow array from a given id
-flow *flow_from_id(int id, int *size);
+flow *flow_from_id(int id, int *size, time_t reference_start_time);
 
 // This function returns the height array from a given id
-height *height_from_id(int id, int *size);
+height *height_from_id(int id, int *size, time_t reference_start_time);
 
 // This function counts the number of alarms in a given time
-overflow_period *overflow_occurrences_id(int id, float threshold, int *overflowCount);
-
-
+overflow_period *overflow_occurrences_id(int id, float threshold, int *overflowCount, time_t reference_start_time);
 
 // This function determines the overflow occurrences based on the threshold in a given time
 overflow_period *overflow_occurrences(height *heightArray, int size, float threshold, int *overflowCount);
-
-// ------ DONE ------ //
