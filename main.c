@@ -5,12 +5,10 @@
 
 time_t reference_start_time;
 
-void water_level_graph(int sensorChoice);
 void water_level_statistics(int sensorChoice);
-void flow_graph(int sensorChoice);
 void set_water_level_alarm(int sensorChoice);
 void data_menu(int sensorChoice);
-void sensor_menu();
+void sensor_menu(void);
 
 int main(void) {
     reference_start_time = time(NULL); // Set the reference start time
@@ -21,7 +19,7 @@ int main(void) {
     return 0;
 }
 
-void sensor_menu() {
+void sensor_menu(void) {
     int choice;
     int numberOfSensors;
     int isValid;
@@ -74,10 +72,8 @@ void data_menu(int sensorChoice) {
     do {
         printf("\n--- Data Menu ---\n");
         printf("0. Exit the program\n");
-        printf("1. Water level graph\n");
-        printf("2. Water level Statistics\n");
-        printf("3. Flow graph\n");
-        printf("4. Set water level alarm\n");
+        printf("1. Water level Statistics\n");
+        printf("2. Set water level alarm\n");
         printf("Choose where you want to go: ");
         isValid = scanf(" %d", &choice);
 
@@ -85,21 +81,15 @@ void data_menu(int sensorChoice) {
         while (getchar() != '\n');
 
         switch (choice) {
-            case 1:
-                water_level_graph(sensorChoice);
-                break;
-            case 2:
-                water_level_statistics(sensorChoice);
-                break;
-            case 3:
-                flow_graph(sensorChoice);
-                break;
-            case 4:
-                set_water_level_alarm(sensorChoice);
-                break;
             case 0:
                 printf("Exiting program\n");
                 exit(EXIT_SUCCESS);
+                break;
+            case 1:
+                water_level_statistics(sensorChoice);
+                break;
+            case 2:
+                set_water_level_alarm(sensorChoice);
                 break;
             default:
                 printf("\n\x1B[31mInvalid choice!\x1B[0m\n");    // colors the printf statement in the terminal
