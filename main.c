@@ -3,10 +3,6 @@
 #include <strings.h>
 #include "functions.h"
 
-#define SENSOR_1_THRESHOLD 0.5
-#define SENSOR_2_THRESHOLD 1.0
-#define SENSOR_3_THRESHOLD 1.5
-
 time_t reference_start_time;
 
 void water_level_graph(int sensorChoice);

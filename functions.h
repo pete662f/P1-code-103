@@ -69,13 +69,9 @@ height *height_from_id(int id, int *size);
 // This function counts the number of alarms in a given time
 overflow_period *overflow_occurrences_id(int id, float threshold, int *overflowCount);
 
-// ------ DONE ------ //
+
 
 // This function determines the overflow occurrences based on the threshold in a given time
 overflow_period *overflow_occurrences(height *heightArray, int size, float threshold, int *overflowCount);
 
-// this function reads the data from data.txt and stores it in a flow array
-flow *read_data(const char *filename, int *size);
-
-// Could use https://gr-framework.org/c.html for drawing graphs or 
-void draw_graph(double *array);
+// ------ DONE ------ //
