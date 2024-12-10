@@ -20,7 +20,7 @@ struct height {
 struct sensor {
     int id;
     char name[1024];
-    char parth[1024];
+    char path[1024];
 };
 
 struct overflow_period {
@@ -59,6 +59,15 @@ double average_flow(int timePeriod, flow flowArray[], int arrayLength);
 
 // This function gives the max or min flow in a given time
 double min_max_flow(int timePeriod, int min_max_bit, flow flowArray[], int arrayLength);
+
+// This function returns the flow array from a given id
+flow *flow_from_id(int id, int *size);
+
+// This function returns the height array from a given id
+height *height_from_id(int id, int *size);
+
+// This function counts the number of alarms in a given time
+overflow_period *overflow_occurrences_id(int id, float threshold, int *overflowCount);
 
 // ------ DONE ------ //
 
