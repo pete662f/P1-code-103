@@ -49,6 +49,32 @@
     return 0;
 }*/
 
+flow *flow_from_id(int id, int *size) {
+    char filePath[1024];
+    sensor *sensors = path_of_sensors("./data/");
+    sprintf(filePath, "./data/%s", sensors[id].path);
+    free(sensors);
+    data *dataArray = array_from_file(filePath, size);
+    flow *flowArray = flow_array(dataArray, *size);
+    free(dataArray);
+    return flowArray;
+}
+
+height *height_from_id(int id, int *size) {
+    flow *flowArray = flow_from_id(id, size);
+    height *heightArray = height_array(flowArray, *size);
+    free(flowArray);
+    return heightArray;
+}
+
+overflow_period *overflow_occurrences_id(int id, float threshold, int *overflowCount) {
+    int size;
+    height *heightArray = height_from_id(id, &size);
+    overflow_period *overflowArray = overflow_occurrences(heightArray, size, threshold, overflowCount);
+    free(heightArray);
+    return overflowArray;
+}
+
 flow *flow_array(data *dataArray, int size) {
     // We have to double the size of the malloc because we will have two doubles in each index.
     flow *flowArray = malloc(sizeof(flow) * size);
@@ -118,7 +144,7 @@ data *array_from_file(char *filePath, int *size) {
 
     // Validate the opening of the file.
     if (file == NULL) {
-        printf("Error reading file\n");
+        printf("Error reading file %s\n",filePath);
         exit(EXIT_FAILURE);
     }
 
@@ -190,8 +216,15 @@ sensor *path_of_sensors(char folderPath[1024]) {
     DIR *d;
     struct dirent *dir;
     int size = number_of_sensors(folderPath);
-    sensor *parth = malloc(sizeof(sensor) * size);
     int i = 0;
+    sensor *parth = malloc(sizeof(sensor) * size);
+
+    if (parth == NULL) {
+        printf("Error creating array\n");
+        exit(EXIT_FAILURE);
+    }
+
+    
 
     d = opendir(folderPath);
 
@@ -201,7 +234,7 @@ sensor *path_of_sensors(char folderPath[1024]) {
             // Checks if the dirnames are not . or ..
             if (strcmp(dir->d_name, ".") && strcmp(dir->d_name, "..")) {
                 // Copy the name of the file into parth array.
-                strcpy(parth[i].parth, dir->d_name);
+                strcpy(parth[i].path, dir->d_name);
                 strcpy(parth[i].name, dir->d_name);
                 parth[i].id = i;
                 i++;
