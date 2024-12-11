@@ -5,27 +5,27 @@
 #include <time.h>
 #include "functions.h"
 
-flow *flow_from_id(int id, int *size, time_t reference_start_time) {
+flow *flow_from_id(int id, int *size, time_t referenceStartTime) {
     char filePath[MAX_SIZE];
     sensor *sensors = path_of_sensors("./data/");
     sprintf(filePath, "./data/%s", sensors[id].path);
     free(sensors);
-    data *dataArray = array_from_file(filePath, size, reference_start_time);
+    data *dataArray = array_from_file(filePath, size, referenceStartTime);
     flow *flowArray = flow_array(dataArray, *size);
     free(dataArray);
     return flowArray;
 }
 
-height *height_from_id(int id, int *size, time_t reference_start_time) {
-    flow *flowArray = flow_from_id(id, size, reference_start_time);
+height *height_from_id(int id, int *size, time_t referenceStartTime) {
+    flow *flowArray = flow_from_id(id, size, referenceStartTime);
     height *heightArray = height_array(flowArray, *size);
     free(flowArray);
     return heightArray;
 }
 
-overflow_period *overflow_occurrences_id(int id, float threshold, int *overflowCount, time_t reference_start_time) {
+overflow_period *overflow_occurrences_id(int id, float threshold, int *overflowCount, time_t referenceStartTime) {
     int size;
-    height *heightArray = height_from_id(id, &size, reference_start_time);
+    height *heightArray = height_from_id(id, &size, referenceStartTime);
     overflow_period *overflowArray = overflow_occurrences(heightArray, size, threshold, overflowCount);
     free(heightArray);
     return overflowArray;
@@ -86,7 +86,7 @@ height *height_array(flow *flowArray, int size) {
 }
 
 // This function reads the data from a file and stores it in a two dimensional array.
-data *array_from_file(char *filePath, int *size, time_t reference_start_time) {
+data *array_from_file(char *filePath, int *size, time_t referenceStartTime) {
     int time, rotations;
     int lines = 0;
     char ch;
@@ -138,7 +138,7 @@ data *array_from_file(char *filePath, int *size, time_t reference_start_time) {
         // sscanf is used to read formatted input from a string.
         sscanf(line, "%d %d", &time, &rotations);
         
-        array[i].timestamp = reference_start_time + (time / 1000); // Convert milliseconds to seconds and add to reference start time;
+        array[i].timestamp = referenceStartTime + (time / 1000); // Convert milliseconds to seconds and add to reference start time;
         array[i].rotations = rotations;
     }
 

@@ -3,7 +3,7 @@
 #include <strings.h>
 #include "functions.h"
 
-time_t reference_start_time;
+time_t referenceStartTime;
 
 void water_level_statistics(int sensorChoice);
 void set_water_level_alarm(int sensorChoice);
@@ -11,7 +11,7 @@ void data_menu(int sensorChoice);
 void sensor_menu(void);
 
 int main(void) {
-    reference_start_time = time(NULL); // Set the reference start time
+    referenceStartTime = time(NULL); // Set the reference start time
     while (1) {
         sensor_menu(); 
     } 
@@ -113,7 +113,7 @@ void water_level_statistics(int sensorChoice) {
     int isValid;
 
     // sensorChoice-1 because the sensor id starts at 0
-    flow *arr = flow_from_id(sensorChoice-1, &arrLength, reference_start_time);
+    flow *arr = flow_from_id(sensorChoice-1, &arrLength, referenceStartTime);
 
     printf("Water Level Statistics, sensor %d\n", sensorChoice);
     do {
@@ -159,7 +159,7 @@ void set_water_level_alarm(int sensorChoice) {
     int overflowCount = 0;
     overflow_period *overflowArray;
     
-    overflowArray = overflow_occurrences_id(sensorChoice-1, threshold, &overflowCount, reference_start_time); // sensorChoice-1 because the sensor id starts at 0
+    overflowArray = overflow_occurrences_id(sensorChoice-1, threshold, &overflowCount, referenceStartTime); // sensorChoice-1 because the sensor id starts at 0
 
     printf("Checking sensor %d with threshold %f\n", sensorChoice, threshold);
     printf("Overflow periods for sensor %d: ", sensorChoice);
