@@ -122,8 +122,8 @@ void water_level_statistics(int sensorChoice) {
     } while (timePeriod < 0 || timePeriod > 3600 || !isValid);
     printf("The average flow is %f mL/hour\n", average_flow(timePeriod, arr, arrLength));
     qsort(arr,arrLength,sizeof(flow), comp_asc);
-    printf("The minimum flow was: %f\n", min_max_flow(timePeriod, 1, arr, arrLength));
-    printf("The maximum flow was: %f\n", min_max_flow(timePeriod, 0, arr, arrLength));
+    printf("The minimum flow was: %f\n mL/hour", min_max_flow(timePeriod, 1, arr, arrLength));
+    printf("The maximum flow was: %f\n mL/hour", min_max_flow(timePeriod, 0, arr, arrLength));
 
     free(arr);
 
