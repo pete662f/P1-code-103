@@ -63,7 +63,7 @@ flow *flow_array(data *dataArray, int size) {
 height *height_array(flow *flowArray, int size) {
     height *heightArray = malloc(sizeof(height) * size);
     const double g = 9.81; // Gravitational acceleration constant
-    const double A = 0.1; // TODO: CHANGE ME
+    const double A = 0.1; // TODO: CHANGE ME 
     double Q; // Volematric flow rate
 
     // Validate the initialization of the array.
@@ -227,19 +227,6 @@ double min_max_flow(int timePeriod, int min_max_bit, flow flowArray[], int array
 
 int comp_asc(const void *a, const void *b) {
     return ((struct flow*)b) -> flow - ((struct flow*)a) -> flow;
-}
-
-int count_alarms(height *heightArray, int size, time_t interval, float threshold) {
-    int count = 0;
-    time_t currentTime = time(NULL);
-    time_t startTime = currentTime - interval;
-
-    for (int i = 0; i < size; i++) {
-        if (heightArray[i].timestamp >= startTime && heightArray[i].height > threshold) {
-            count++;
-        }
-    }
-    return count;
 }
 
 overflow_period *overflow_occurrences(height *heightArray, int size, float threshold, int *overflowCount) {
