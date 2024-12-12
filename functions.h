@@ -11,8 +11,6 @@ struct data {
 struct flow {
     time_t timestamp; // Timestamp provided by the Arduino
     double flow;
-    double total_quantity;
-    double pulsecount;
 };
 
 struct height {
