@@ -196,15 +196,22 @@ sensor *path_of_sensors(char folderPath[MAX_SIZE]) {
 }
 
 double average_flow(int timePeriod, flow flowArray[], int arrayLength){
-    //timePeriod in hours 
+
+    //timePeriod in hours
     int timeBetweenMeasurements = flowArray[1].timestamp - flowArray[0].timestamp; //In milliseconds
-    double measurementsPerHour = 60 / (timeBetweenMeasurements / 1000 / 60);
-    double measurementsForPeriod = measurementsPerHour * timePeriod;
-    arrayLength -= 1;
+
+    double measurementsPerHour = 60.0 * 60 * 1000 / (double)timeBetweenMeasurements;
+    double measurementsForPeriod = measurementsPerHour * (double)timePeriod;
     double totalFlow = 0;
     double averageFlow = 0;
 
-    for (int i = measurementsForPeriod; i >= 0; i--){
+    if (measurementsForPeriod > arrayLength) {
+        printf("Not enough measuring points for the chosen time period. - %f", measurementsForPeriod);
+        printf("Length: %d\n", arrayLength);
+        return 1;
+    }
+
+    for (int i = 2; i >= 0; i--){
         totalFlow += flowArray[arrayLength-i].flow;
     }
 
