@@ -196,7 +196,6 @@ sensor *path_of_sensors(char folderPath[MAX_SIZE]) {
 }
 
 double average_flow(int timePeriod, flow flowArray[], int arrayLength){
-
     //timePeriod in hours
     int timeBetweenMeasurements = flowArray[1].timestamp - flowArray[0].timestamp; //In milliseconds
 
