@@ -222,6 +222,7 @@ double average_flow(int timePeriod, flow flowArray[], int arrayLength){
 
 double min_max_flow(int timePeriod, int min_max_bit, flow flowArray[], int arrayLength) {
     //Function assumes sorted flow array with the lowest flow value at index 0.
+
     switch (min_max_bit) {
         case 0:
             return flowArray[0].flow;
