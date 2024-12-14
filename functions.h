@@ -3,11 +3,6 @@
 #define MAX_SIZE 1024
 #define MAX_BUFFER 64
 
-struct data {
-    time_t timestamp; // Time in seconds
-    int volume;
-};
-
 struct flow {
     time_t timestamp; // Timestamp provided by the Arduino
     double flow;
@@ -29,17 +24,13 @@ struct overflow_period {
     time_t end;
 };
 
-typedef struct data data;
 typedef struct flow flow;
 typedef struct height height;
 typedef struct sensor sensor;
 typedef struct overflow_period overflow_period;
 
 // This function reads the data from a file and stores it in a two dimensional array.
-data *array_from_file(char *filePath, int *size, time_t referenceStartTime);
-
-// This function calculates the flow rate using the formula Q=dv/dt
-flow *flow_array(data *dataArray, int size);
+data *flow_array_from_file(char *filePath, int *size, time_t referenceStartTime);
 
 // This function calculates the height of the water using the formula h=(Q^2)/(2*g*A^2)
 height *height_array(flow *flowArray, int size);

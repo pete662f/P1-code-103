@@ -10,9 +10,7 @@ flow *flow_from_id(int id, int *size, time_t referenceStartTime) {
     sensor *sensors = path_of_sensors("./data/");
     sprintf(filePath, "./data/%s", sensors[id].path);
     free(sensors);
-    data *dataArray = array_from_file(filePath, size, referenceStartTime);
-    flow *flowArray = flow_array(dataArray, *size);
-    free(dataArray);
+    flow *flowArray = flow_array_from_file(filePath, size, referenceStartTime);
     return flowArray;
 }
 
@@ -29,35 +27,6 @@ overflow_period *overflow_occurrences_id(int id, float threshold, int *overflowC
     overflow_period *overflowArray = overflow_occurrences(heightArray, size, threshold, overflowCount);
     free(heightArray);
     return overflowArray;
-}
-
-flow *flow_array(data *dataArray, int size) {
-    flow *flowArray = malloc(sizeof(flow) * size);
-    const double V = 0.1; // TODO: CHANGE ME 
-    double deltaTime;
-
-    // Validate the initialization of the array.
-    if (flowArray == NULL) {
-        printf("Error in array\n");
-        exit(EXIT_FAILURE);
-    }
-
-    // Calculates the flow using Q=dv/dt for each time
-    for (int i = 0; i < size; i++) {
-        flowArray[i].timestamp = (double)dataArray[i].timestamp;
-
-        // Calculate the time difference between the current and previous time.
-        if (i > 0) {
-            deltaTime = (double)(dataArray[i].timestamp - dataArray[i - 1].timestamp);
-        } else {
-            deltaTime = 1.0;
-        }
-
-        // Calculate the flow rate.  
-        flowArray[i].flow = (double)dataArray[i].volume/deltaTime;
-    }
-
-    return flowArray;
 }
     
 height *height_array(flow *flowArray, int size) {
@@ -86,7 +55,7 @@ height *height_array(flow *flowArray, int size) {
 }
 
 // This function reads the data from a file and stores it in a two dimensional array.
-data *array_from_file(char *filePath, int *size, time_t referenceStartTime) {
+data *flow_array_from_file(char *filePath, int *size, time_t referenceStartTime) {
     int time, volume;
     int lines = 0;
     char ch;
