@@ -55,8 +55,8 @@ height *height_array(flow *flowArray, int size) {
 }
 
 // This function reads the data from a file and stores it in a two dimensional array.
-data *flow_array_from_file(char *filePath, int *size, time_t referenceStartTime) {
-    int time, volume;
+flow *flow_array_from_file(char *filePath, int *size, time_t referenceStartTime) {
+    int time, flowData;
     int lines = 0;
     char ch;
 
@@ -89,7 +89,7 @@ data *flow_array_from_file(char *filePath, int *size, time_t referenceStartTime)
     *size = lines;
 
     // We have to double the size of the malloc because we will have two integers in each index.
-    data *array = malloc(sizeof(data) * lines);
+    flow *array = malloc(sizeof(flow) * lines);
 
     // Validate the initialization of the array.
     if (array == NULL) {
@@ -105,10 +105,10 @@ data *flow_array_from_file(char *filePath, int *size, time_t referenceStartTime)
         // Read the line from the file and sizeof(line) is the size of the buffer.
         fgets(line, sizeof(line), file);
         // sscanf is used to read formatted input from a string.
-        sscanf(line, "%d %d", &time, &volume);
+        sscanf(line, "%d %d", &time, &flowData);
         
         array[i].timestamp = referenceStartTime + (time / 1000); // Convert milliseconds to seconds and add to reference start time;
-        array[i].volume = volume;
+        array[i].flow = flowData;
     }
 
     fclose(file);
