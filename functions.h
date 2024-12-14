@@ -61,3 +61,6 @@ overflow_period *overflow_occurrences_id(int id, float threshold, int *overflowC
 
 // This function determines the overflow occurrences based on the threshold in a given time
 overflow_period *overflow_occurrences(height *heightArray, int size, float threshold, int *overflowCount);
+
+// This function calculates the number of measurements in a select period
+int calculate_measurements_for_period(int timePeriod, flow flowArray[]);

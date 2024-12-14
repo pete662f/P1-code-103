@@ -174,14 +174,10 @@ sensor *path_of_sensors(char folderPath[]) {
 }
 
 double average_flow(int timePeriod, flow flowArray[], int arrayLength){
-    //timePeriod in hours
-    int timeBetweenMeasurements = flowArray[1].timestamp - flowArray[0].timestamp; //In milliseconds
-
-    int measurementsPerHour = SEC_TO_HOUR / timeBetweenMeasurements;
-    int measurementsForPeriod = measurementsPerHour * timePeriod;
-
+   
     double totalFlow = 0;
     double averageFlow = 0;
+    int measurementsForPeriod = calculate_measurements_for_period(timePeriod, flowArray);
 
     if (measurementsForPeriod > arrayLength) {
         printf("Not enough measuring points for the chosen time period. - %d", measurementsForPeriod);
@@ -199,14 +195,28 @@ double average_flow(int timePeriod, flow flowArray[], int arrayLength){
     return averageFlow;
 }
 
-double min_max_flow(int timePeriod, int min_max_bit, flow flowArray[]) {
-    //Function assumes sorted flow array with the lowest flow value at index 0.
-    int timeBetweenMeasurements = flowArray[1].timestamp - flowArray[0].timestamp; //In milliseconds
+int calculate_measurements_for_period(int timePeriod, flow flowArray[]) {
+    // timePeriod in hours
+    int deltaTime = flowArray[1].timestamp - flowArray[0].timestamp; // In milliseconds
 
-    int measurementsPerHour = SEC_TO_HOUR / timeBetweenMeasurements;
+    int measurementsPerHour = SEC_TO_HOUR / deltaTime;
     int measurementsForPeriod = measurementsPerHour * timePeriod;
 
+    return measurementsForPeriod;
+}
+
+double min_max_flow(int timePeriod, int min_max_bit, flow flowArray[]) {
+    //Function assumes sorted flow array with the lowest flow value at index 0.
+    int measurementsForPeriod = calculate_measurements_for_period(timePeriod, flowArray);
+
     qsort(flowArray, measurementsForPeriod, sizeof(flow), comp_asc);
+
+    printf("min: %f\n",flowArray[0].flow);
+    printf("max: %f\n",flowArray[measurementsForPeriod-1].flow);
+
+    for (int i = 0; i < timePeriod; i++) {
+        printf("%d: %f\n", i, flowArray[i].flow);
+    }
 
     switch (min_max_bit) {
         case 0:
