@@ -100,13 +100,38 @@ void overflowOccurrencesTest(CuTest* tc)
     CuAssertIntEquals(tc, 3600*9, overflow[1].end);
 }
 
-void flowFileTest(CuTest* tc) {
-    
+void flowFileTest(CuTest* tc)
+{
+    int size = 0;
+    int referenceStartTime = 1000;
+    int lineNumber;
+    flow *flowArray;
+
+    flowArray = flow_array_from_file("./data/testdata.txt", &size, referenceStartTime);
+
+    lineNumber = 1;
+    CuAssertIntEquals(tc, 110 + referenceStartTime, flowArray[lineNumber - 1].timestamp);
+    CuAssertDblEquals(tc, 975062, flowArray[lineNumber - 1].flow, 0.001);
+
+    lineNumber = 100;
+    CuAssertIntEquals(tc, 605 + referenceStartTime, flowArray[lineNumber - 1].timestamp);
+    CuAssertDblEquals(tc, 932307, flowArray[lineNumber - 1].flow, 0.001);
+
+    lineNumber = 254;
+    CuAssertIntEquals(tc, 1375 + referenceStartTime, flowArray[lineNumber - 1].timestamp);
+    CuAssertDblEquals(tc, 980565, flowArray[lineNumber - 1].flow, 0.001);
+
+    lineNumber = 999;
+    CuAssertIntEquals(tc, 5100 + referenceStartTime, flowArray[lineNumber - 1].timestamp);
+    CuAssertDblEquals(tc, 937841, flowArray[lineNumber - 1].flow, 0.001);
+
+    lineNumber = 1000;
+    CuAssertIntEquals(tc, 5105 + referenceStartTime, flowArray[lineNumber - 1].timestamp);
+    CuAssertDblEquals(tc, 920924, flowArray[lineNumber - 1].flow, 0.001);
 }
 
 
 CuSuite* CuStringGetSuite(void)
-
 {
 	CuSuite* suite = CuSuiteNew();
 
@@ -114,6 +139,7 @@ CuSuite* CuStringGetSuite(void)
     SUITE_ADD_TEST(suite, minFlowTest);
     SUITE_ADD_TEST(suite, maxFlowTest);
     SUITE_ADD_TEST(suite, overflowOccurrencesTest);
+    SUITE_ADD_TEST(suite, flowFileTest);
 
 
 	return suite;

@@ -81,7 +81,7 @@ flow *flow_array_from_file(char *filePath, int *size, time_t referenceStartTime)
         exit(EXIT_FAILURE);
     }
 
-    // Calculates the number of lines.
+    // Calculate the number of lines assuming there is a newline at the end.
     // Check if end of file.
     while (!feof(file)) 
     {
