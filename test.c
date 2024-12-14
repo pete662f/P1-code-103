@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "functions.h"
 #include "CuTest.h"
 
@@ -20,7 +21,7 @@ void averageFlowTest(CuTest* tc)
 
     time = 2;
     averageFlow = average_flow(time, flowArray, len);
-    CuAssertDblEquals(tc, 25.0, averageFlow, 0.001);
+    CuAssertDblEquals(tc, 22.5, averageFlow, 0.001);
 }
 
 void minFlowTest(CuTest* tc)
@@ -38,11 +39,11 @@ void minFlowTest(CuTest* tc)
     };
 
     time = 3;
-    minFlow = min_max_flow(time, MIN, flowArray, len);
+    minFlow = min_max_flow(time, MIN, flowArray);
     CuAssertDblEquals(tc, 15.0, minFlow, 0.001);
 
     time = 5;
-    minFlow = min_max_flow(time, MIN, flowArray, len);
+    minFlow = min_max_flow(time, MIN, flowArray);
     CuAssertDblEquals(tc, 10.0, minFlow, 0.001);
 }
 
@@ -61,11 +62,11 @@ void maxFlowTest(CuTest* tc)
     };
 
     time = 3;
-    maxFlow = min_max_flow(time, MAX, flowArray, len);
+    maxFlow = min_max_flow(time, MAX, flowArray);
     CuAssertDblEquals(tc, 30.0, maxFlow, 0.001);
 
     time = 5;
-    maxFlow = min_max_flow(time, MAX, flowArray, len);
+    maxFlow = min_max_flow(time, MAX, flowArray);
     CuAssertDblEquals(tc, 35.0, maxFlow, 0.001);
 }
 
@@ -97,6 +98,10 @@ void overflowOccurrencesTest(CuTest* tc)
 
     CuAssertIntEquals(tc, 3600*7, overflow[1].start);
     CuAssertIntEquals(tc, 3600*9, overflow[1].end);
+}
+
+void flowFileTest(CuTest* tc) {
+    
 }
 
 

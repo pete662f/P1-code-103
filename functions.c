@@ -177,19 +177,21 @@ double average_flow(int timePeriod, flow flowArray[], int arrayLength){
     //timePeriod in hours
     int timeBetweenMeasurements = flowArray[1].timestamp - flowArray[0].timestamp; //In milliseconds
 
-    double measurementsPerHour = SEC_TO_HOUR / (double)timeBetweenMeasurements;
-    double measurementsForPeriod = measurementsPerHour * (double)timePeriod;
+    int measurementsPerHour = SEC_TO_HOUR / timeBetweenMeasurements;
+    int measurementsForPeriod = measurementsPerHour * timePeriod;
+
     double totalFlow = 0;
     double averageFlow = 0;
 
     if (measurementsForPeriod > arrayLength) {
-        printf("Not enough measuring points for the chosen time period. - %f", measurementsForPeriod);
+        printf("Not enough measuring points for the chosen time period. - %d", measurementsForPeriod);
         printf("Length: %d\n", arrayLength);
         return 1;
     }
 
-    for (int i = 0; i < measurementsForPeriod; i++) {
-        totalFlow += flowArray[i].flow;
+    // Check from the latest measurement and back
+    for (int i = measurementsForPeriod; i > 0; i--) {
+        totalFlow += flowArray[arrayLength-i].flow;
     }
 
     averageFlow = totalFlow / timePeriod;
@@ -197,14 +199,20 @@ double average_flow(int timePeriod, flow flowArray[], int arrayLength){
     return averageFlow;
 }
 
-double min_max_flow(int timePeriod, int min_max_bit, flow flowArray[], int arrayLength) {
+double min_max_flow(int timePeriod, int min_max_bit, flow flowArray[]) {
     //Function assumes sorted flow array with the lowest flow value at index 0.
+    int timeBetweenMeasurements = flowArray[1].timestamp - flowArray[0].timestamp; //In milliseconds
+
+    int measurementsPerHour = SEC_TO_HOUR / timeBetweenMeasurements;
+    int measurementsForPeriod = measurementsPerHour * timePeriod;
+
+    qsort(flowArray, measurementsForPeriod, sizeof(flow), comp_asc);
 
     switch (min_max_bit) {
         case 0:
             return flowArray[0].flow;
         case 1:
-            return flowArray[arrayLength-1].flow;
+            return flowArray[measurementsForPeriod-1].flow;
         default:
             return -1;
     }

@@ -48,7 +48,7 @@ int comp_asc(const void *, const void *);
 double average_flow(int timePeriod, flow flowArray[], int arrayLength);
 
 // This function gives the max or min flow in a given time
-double min_max_flow(int timePeriod, int min_max_bit, flow flowArray[], int arrayLength);
+double min_max_flow(int timePeriod, int min_max_bit, flow flowArray[]);
 
 // This function returns the flow array from a given id
 flow *flow_from_id(int id, int *size, time_t referenceStartTime);
