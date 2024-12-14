@@ -13,7 +13,7 @@
 #define PI 3.14
 
 flow *flow_from_id(int id, int *size, time_t referenceStartTime) {
-    char filePath[MAX_SIZE];
+    char filePath[MAX_SIZE + 32]; // 32 is to make space for "./data/" or any other path
     sensor *sensors = path_of_sensors("./data/");
     sprintf(filePath, "./data/%s", sensors[id].path);
     free(sensors);
@@ -146,7 +146,7 @@ int number_of_sensors(char folderPath[MAX_SIZE]) {
     return count;
 }
 
-sensor *path_of_sensors(char folderPath[MAX_SIZE]) {
+sensor *path_of_sensors(char folderPath[]) {
     DIR *d;
     struct dirent *dir;
     int size = number_of_sensors(folderPath);

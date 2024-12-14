@@ -39,7 +39,7 @@ height *height_array(flow *flowArray, int size);
 int number_of_sensors(char folderPath[MAX_SIZE]);
 
 // This function returns the id, path and name of the sensors in a given folder
-sensor *path_of_sensors(char folderPath[MAX_SIZE]);
+sensor *path_of_sensors(char folderPath[]);
 
 //Compares Flow array and return lowest flow value at index 0.
 int comp_asc(const void *, const void *);
