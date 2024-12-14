@@ -221,7 +221,6 @@ overflow_period *overflow_occurrences(height *heightArray, int size, float thres
     time_t start = 0;
 
     for (int i = 0; i < size; i++) {
-        printf("Height at index %d: %f\n", i, heightArray[i].height); // Debug print
         if (heightArray[i].height > threshold) {
             if (!inOverflow) {
                 start = heightArray[i].timestamp;
