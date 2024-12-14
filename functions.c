@@ -5,6 +5,11 @@
 #include <time.h>
 #include "functions.h"
 
+// Constant for converting mL to m^3
+#define ML_TO_M3 1000000
+
+#define SEC_TO_HOUR (60 * 60)
+
 flow *flow_from_id(int id, int *size, time_t referenceStartTime) {
     char filePath[MAX_SIZE];
     sensor *sensors = path_of_sensors("./data/");
@@ -35,6 +40,8 @@ height *height_array(flow *flowArray, int size) {
     const double A = 0.1; // TODO: CHANGE ME 
     double Q; // Volematric flow rate
 
+    
+    
     // Validate the initialization of the array.
     if (heightArray == NULL) {
         printf("Error in array\n");
@@ -47,7 +54,7 @@ height *height_array(flow *flowArray, int size) {
         heightArray[i].timestamp = flowArray[i].timestamp;
 
         // Calculating the height of the water
-        Q=flowArray[i].flow;
+        Q=flowArray[i].flow*ML_TO_M3;
         heightArray[i].height = (Q*Q)/(2*g*A*A);
     }
     
@@ -168,7 +175,7 @@ double average_flow(int timePeriod, flow flowArray[], int arrayLength){
     //timePeriod in hours
     int timeBetweenMeasurements = flowArray[1].timestamp - flowArray[0].timestamp; //In milliseconds
 
-    double measurementsPerHour = 60.0 * 60.0 / (double)timeBetweenMeasurements;
+    double measurementsPerHour = SEC_TO_HOUR / (double)timeBetweenMeasurements;
     double measurementsForPeriod = measurementsPerHour * (double)timePeriod;
     double totalFlow = 0;
     double averageFlow = 0;
