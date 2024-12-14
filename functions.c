@@ -10,6 +10,8 @@
 
 #define SEC_TO_HOUR (60 * 60)
 
+#define PI 3.14
+
 flow *flow_from_id(int id, int *size, time_t referenceStartTime) {
     char filePath[MAX_SIZE];
     sensor *sensors = path_of_sensors("./data/");
@@ -37,7 +39,7 @@ overflow_period *overflow_occurrences_id(int id, float threshold, int *overflowC
 height *height_array(flow *flowArray, int size) {
     height *heightArray = malloc(sizeof(height) * size);
     const double g = 9.81; // Gravitational acceleration constant
-    const double A = 0.1; // TODO: CHANGE ME 
+    const double A = 0.20*0.20*PI; // Area of pipe hole
     double Q; // Volematric flow rate
 
     
