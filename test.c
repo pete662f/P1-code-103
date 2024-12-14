@@ -1,31 +1,26 @@
 #include "functions.h"
 #include "CuTest.h"
 
-#define L
+#define LEN 3
 
 void flowArrayTest(CuTest* tc)
 {
-    data dataArray[3] = {
-        {1, 10},
-        {2, 20},
-        {3, 10}
+    int hour = 60*60;
+
+    flow flowArray[LEN] = {
+        {hour, 20},
+        {hour, 30},
+        {hour, 15}
     };
-    
-    flow *flowArray = flow_array(dataArray, 3);
 
-    CuAssertIntEquals(tc, 1, flow[0].timestamp);
-    CuAssertDblEquals(tc, 3, flow[0].flow. 0.001);
+    double averageFlow = average_flow(2, flowArray, LEN);
 
-    CuAssertIntEquals(tc, 1, flow[1].timestamp);
-    CuAssertDblEquals(tc, 3, flow[1].flow. 0.001);
-
-    CuAssertIntEquals(tc, 1, flow[2].timestamp);
-    CuAssertDblEquals(tc, 3, flow[2].flow. 0.001);
+    CuAssertDblEquals(tc, 25.0, averageFlow, 0.001);
     
 }
 
-
 CuSuite* CuStringGetSuite(void)
+
 {
 	CuSuite* suite = CuSuiteNew();
 
