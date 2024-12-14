@@ -3,14 +3,12 @@
 
 #define LEN 3
 
-void flowArrayTest(CuTest* tc)
+void averageFlowTest(CuTest* tc)
 {
-    int hour = 60*60;
-
     flow flowArray[LEN] = {
-        {hour, 20},
-        {hour, 30},
-        {hour, 15}
+        {3600, 20},
+        {3600*2, 30},
+        {3600*3, 15}
     };
 
     double averageFlow = average_flow(2, flowArray, LEN);
@@ -24,7 +22,7 @@ CuSuite* CuStringGetSuite(void)
 {
 	CuSuite* suite = CuSuiteNew();
 
-	SUITE_ADD_TEST(suite, flowArrayTest);
+	SUITE_ADD_TEST(suite, averageFlowTest);
 
 
 	return suite;
