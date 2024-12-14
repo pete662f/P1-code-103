@@ -179,13 +179,9 @@ double average_flow(int timePeriod, flow flowArray[], int arrayLength){
         return 1;
     }
 
-    for (int i = measurementsForPeriod; i >= 0; i--){
-        totalFlow += flowArray[arrayLength-i].flow;
-    }
-
-    /*for (int i = 0; i <= measurementsForPeriod; i++) {
+    for (int i = 0; i < measurementsForPeriod; i++) {
         totalFlow += flowArray[i].flow;
-    }*/
+    }
 
     averageFlow = totalFlow / timePeriod;
 
