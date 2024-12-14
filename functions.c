@@ -168,7 +168,7 @@ double average_flow(int timePeriod, flow flowArray[], int arrayLength){
     //timePeriod in hours
     int timeBetweenMeasurements = flowArray[1].timestamp - flowArray[0].timestamp; //In milliseconds
 
-    double measurementsPerHour = 60.0 * 1000 / (double)timeBetweenMeasurements;
+    double measurementsPerHour = 60.0 * 60.0 / (double)timeBetweenMeasurements;
     double measurementsForPeriod = measurementsPerHour * (double)timePeriod;
     double totalFlow = 0;
     double averageFlow = 0;
