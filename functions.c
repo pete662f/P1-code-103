@@ -54,7 +54,7 @@ flow *flow_array(data *dataArray, int size) {
         }
 
         // Calculate the flow rate.  
-        flowArray[i].flow = (double)dataArray[i].rotations*V/deltaTime;
+        flowArray[i].flow = (double)dataArray[i].volume/deltaTime;
     }
 
     return flowArray;
@@ -87,7 +87,7 @@ height *height_array(flow *flowArray, int size) {
 
 // This function reads the data from a file and stores it in a two dimensional array.
 data *array_from_file(char *filePath, int *size, time_t referenceStartTime) {
-    int time, rotations;
+    int time, volume;
     int lines = 0;
     char ch;
 
@@ -136,10 +136,10 @@ data *array_from_file(char *filePath, int *size, time_t referenceStartTime) {
         // Read the line from the file and sizeof(line) is the size of the buffer.
         fgets(line, sizeof(line), file);
         // sscanf is used to read formatted input from a string.
-        sscanf(line, "%d %d", &time, &rotations);
+        sscanf(line, "%d %d", &time, &volume);
         
         array[i].timestamp = referenceStartTime + (time / 1000); // Convert milliseconds to seconds and add to reference start time;
-        array[i].rotations = rotations;
+        array[i].volume = volume;
     }
 
     fclose(file);

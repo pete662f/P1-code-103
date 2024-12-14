@@ -5,7 +5,7 @@
 
 struct data {
     time_t timestamp; // Time in seconds
-    int rotations;
+    int volume;
 };
 
 struct flow {
