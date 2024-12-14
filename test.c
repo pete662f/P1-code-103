@@ -31,19 +31,19 @@ void minFlowTest(CuTest* tc)
     int time = 0;
 
     flow flowArray[5] = {
-        {3600, 20},
-        {3600*2, 30},
-        {3600*3, 15},
-        {3600*4, 35},
-        {3600*5, 10}
+        {3600, 10},
+        {3600*2, 35},
+        {3600*3, 20},
+        {3600*4, 30},
+        {3600*5, 15}
     };
 
     time = 3;
-    minFlow = min_max_flow(time, MIN, flowArray);
+    minFlow = min_max_flow(time, MIN, flowArray, len);
     CuAssertDblEquals(tc, 15.0, minFlow, 0.001);
 
     time = 5;
-    minFlow = min_max_flow(time, MIN, flowArray);
+    minFlow = min_max_flow(time, MIN, flowArray, len);
     CuAssertDblEquals(tc, 10.0, minFlow, 0.001);
 }
 
@@ -54,19 +54,19 @@ void maxFlowTest(CuTest* tc)
     int time = 0;
 
     flow flowArray[5] = {
-        {3600, 20},
-        {3600*2, 30},
-        {3600*3, 15},
-        {3600*4, 35},
-        {3600*5, 10}
+        {3600, 10},
+        {3600*2, 35},
+        {3600*3, 20},
+        {3600*4, 30},
+        {3600*5, 15}
     };
 
     time = 3;
-    maxFlow = min_max_flow(time, MAX, flowArray);
+    maxFlow = min_max_flow(time, MAX, flowArray, len);
     CuAssertDblEquals(tc, 30.0, maxFlow, 0.001);
 
     time = 5;
-    maxFlow = min_max_flow(time, MAX, flowArray);
+    maxFlow = min_max_flow(time, MAX, flowArray, len);
     CuAssertDblEquals(tc, 35.0, maxFlow, 0.001);
 }
 

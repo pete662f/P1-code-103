@@ -205,17 +205,24 @@ int calculate_measurements_for_period(int timePeriod, flow flowArray[]) {
     return measurementsForPeriod;
 }
 
-double min_max_flow(int timePeriod, int min_max_bit, flow flowArray[]) {
+double min_max_flow(int timePeriod, int min_max_bit, flow flowArray[], int size) {
     //Function assumes sorted flow array with the lowest flow value at index 0.
     int measurementsForPeriod = calculate_measurements_for_period(timePeriod, flowArray);
 
-    qsort(flowArray, measurementsForPeriod, sizeof(flow), comp_asc);
+    flow flowForTimePeriod[measurementsForPeriod];
+
+    // Copy the array to get only the end
+    for (int i = 0; i < measurementsForPeriod; i++) {
+        flowForTimePeriod[i] = flowArray[(size - 1) - i];
+    }
+
+    qsort(flowForTimePeriod, measurementsForPeriod, sizeof(flow), comp_asc);
 
     switch (min_max_bit) {
         case 0:
-            return flowArray[0].flow;
+            return flowForTimePeriod[0].flow;
         case 1:
-            return flowArray[measurementsForPeriod-1].flow;
+            return flowForTimePeriod[measurementsForPeriod-1].flow;
         default:
             return -1;
     }
