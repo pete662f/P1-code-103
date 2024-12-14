@@ -5,7 +5,7 @@ time value
 ```
 ## Compile
 To compile the project, run the following command:
-`gcc main.c functions.c -o main`
+`gcc main.c functions.c CuTest.c -o main`
 ## Run
 To run the project, run the following command:
 `./main`
