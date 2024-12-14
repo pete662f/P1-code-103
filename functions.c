@@ -211,13 +211,6 @@ double min_max_flow(int timePeriod, int min_max_bit, flow flowArray[]) {
 
     qsort(flowArray, measurementsForPeriod, sizeof(flow), comp_asc);
 
-    printf("min: %f\n",flowArray[0].flow);
-    printf("max: %f\n",flowArray[measurementsForPeriod-1].flow);
-
-    for (int i = 0; i < timePeriod; i++) {
-        printf("%d: %f\n", i, flowArray[i].flow);
-    }
-
     switch (min_max_bit) {
         case 0:
             return flowArray[0].flow;
@@ -229,7 +222,7 @@ double min_max_flow(int timePeriod, int min_max_bit, flow flowArray[]) {
 }
 
 int comp_asc(const void *a, const void *b) {
-    return ((struct flow*)b) -> flow - ((struct flow*)a) -> flow;
+    return ((struct flow*)a) -> flow - ((struct flow*)b) -> flow;
 }
 
 overflow_period *overflow_occurrences(height *heightArray, int size, float threshold, int *overflowCount) {
