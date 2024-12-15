@@ -24,16 +24,14 @@ void sensor_menu(void) {
     int numberOfSensors;
     int isValid;
 
-    // Uses functions from functions.h (number_of_sensors, and parth_of_sensors) 
     numberOfSensors = number_of_sensors("./data/");
-    sensor *sensor = path_of_sensors("./data/");
-
         
     if (numberOfSensors < 0 || sensor == NULL) {
         printf("Failed to load sensors.\n");
         return;
     }
 
+    sensor *sensor = path_of_sensors("./data/");
 
 // The code in the do-while loop runs until the conditions in the while-loop are fullfilled
     do {
