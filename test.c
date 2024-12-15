@@ -133,9 +133,9 @@ void flowFileTest(CuTest* tc)
 
 CuSuite* CuStringGetSuite(void)
 {
-	CuSuite* suite = CuSuiteNew();
+    CuSuite* suite = CuSuiteNew();
 
-	SUITE_ADD_TEST(suite, averageFlowTest);
+    SUITE_ADD_TEST(suite, averageFlowTest);
     SUITE_ADD_TEST(suite, minFlowTest);
     SUITE_ADD_TEST(suite, maxFlowTest);
     SUITE_ADD_TEST(suite, overflowOccurrencesTest);
