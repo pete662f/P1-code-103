@@ -100,11 +100,6 @@ void data_menu(int sensorChoice) {
     } while (choice < 0 || choice > 4 || !isValid);
 }
 
-void water_level_graph(int sensorChoice) {
-    printf("Water Level Graph, sensor %d\n", sensorChoice);
-    // Code here
-}
-
 void water_level_statistics(int sensorChoice) {
     int arrLength;
     int timePeriod;
@@ -131,11 +126,6 @@ void water_level_statistics(int sensorChoice) {
     // Wait for user to press enter
     printf("\nPress Enter to Continue...");
     while( getchar() != '\n' );
-}
-
-void flow_graph(int sensorChoice) {
-    printf("Flow Graph, sensor %d\n", sensorChoice);
-    // Code here
 }
 
 void set_water_level_alarm(int sensorChoice) {
