@@ -180,9 +180,9 @@ double average_flow(int timePeriod, flow flowArray[], int arrayLength){
     int measurementsForPeriod = calculate_measurements_for_period(timePeriod, flowArray);
 
     if (measurementsForPeriod > arrayLength) {
-        printf("Not enough measuring points for the chosen time period. - %d", measurementsForPeriod);
+        printf("Not enough measuring points for average flow i the chosen time period. - %d\n", measurementsForPeriod);
         printf("Length: %d\n", arrayLength);
-        return 1;
+        return -1;
     }
 
     // Check from the latest measurement and back

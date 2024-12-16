@@ -25,15 +25,14 @@ void sensor_menu(void) {
     int isValid;
 
     numberOfSensors = number_of_sensors("./data/");
+    sensor *sensor = path_of_sensors("./data/");
         
     if (numberOfSensors < 0 || sensor == NULL) {
         printf("Failed to load sensors.\n");
         return;
     }
 
-    sensor *sensor = path_of_sensors("./data/");
-
-// The code in the do-while loop runs until the conditions in the while-loop are fullfilled
+    // The code in the do-while loop runs until the conditions in the while-loop are fullfilled
     do {
         printf("\n--- Sensor Menu ---\n");
         printf("0. Exit the program\n");
@@ -104,6 +103,7 @@ void water_level_statistics(int sensorChoice) {
     int arrLength;
     int timePeriod;
     int isValid;
+    double averageFlow;
 
     // sensorChoice-1 because the sensor id starts at 0
     flow *arr = flow_from_id(sensorChoice-1, &arrLength, referenceStartTime);
@@ -112,8 +112,18 @@ void water_level_statistics(int sensorChoice) {
     do {
         printf("Please input number of hours to include data from: ");
         isValid = scanf(" %d", &timePeriod);
-    } while (timePeriod < 0 || timePeriod > 3600 || !isValid);
-    printf("The average flow is %f mL/hour\n", average_flow(timePeriod, arr, arrLength));
+        if (timePeriod <= 0 || timePeriod > 3600 || !isValid) {
+            printf("\n\x1B[31mInvalid time period!\x1B[0m\n");
+        }
+    } while (timePeriod <= 0 || timePeriod > 3600 || !isValid);
+
+    averageFlow = average_flow(timePeriod, arr, arrLength);
+
+    if (averageFlow < 0.0) {
+        printf("\n\x1B[31mAverage flow is invalid!\x1B[0m\n");
+    } else {
+        printf("\nThe average flow is %f mL/hour\n", averageFlow);
+    }
     
     printf("The minimum flow was: %f mL/hour\n", min_max_flow(timePeriod, 1, arr, arrLength));
     printf("The maximum flow was: %f mL/hour\n", min_max_flow(timePeriod, 0, arr, arrLength));
@@ -129,14 +139,14 @@ void water_level_statistics(int sensorChoice) {
 }
 
 void set_water_level_alarm(int sensorChoice) {
-    double threshold;
+    float threshold;
     int isValid;
 
     printf("Set Water Level Alarm, sensor %d\n", sensorChoice);
 
     do {
         printf("Please set the threshold: ");
-        isValid = scanf(" %lf", &threshold);
+        isValid = scanf(" %f", &threshold);
     } while (threshold < 0 || !isValid);
 
     int overflowCount = 0;
