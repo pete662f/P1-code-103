@@ -1,4 +1,4 @@
-# Swer data prossing from sensor
+# Sewer data processing from sensor
 This is a simple project to process data from a sensor. The sensor is a simple device that sends data to a file. The data is in the following format:
 ```
 time volume

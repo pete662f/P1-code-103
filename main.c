@@ -32,14 +32,14 @@ void sensor_menu(void) {
         return;
     }
 
-    // The code in the do-while loop runs until the conditions in the while-loop are fullfilled
+    // The code in the do-while loop runs until the conditions in the while-loop are fulfilled
     do {
         printf("\n--- Sensor Menu ---\n");
         printf("0. Exit the program\n");
 
         for (int i = 0; i < numberOfSensors; i++) {
             char *pch;
-            // Pch removes file exstention (.txt) on sensor menu
+            // Pch removes file extensions (.txt) on sensor menu
             pch = strtok(sensor[i].name,".");
             printf("%d. %s\n", i + 1, pch);
         }

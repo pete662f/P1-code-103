@@ -29,7 +29,7 @@ typedef struct height height;
 typedef struct sensor sensor;
 typedef struct overflow_period overflow_period;
 
-// This function reads the data from a file and stores it in a two dimensional array.
+// This function reads the data from a file and stores it in a two-dimensional array.
 flow *flow_array_from_file(char *filePath, int *size, time_t referenceStartTime);
 
 // This function calculates the height of the water using the formula h=(Q^2)/(2*g*A^2)

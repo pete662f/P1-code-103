@@ -40,7 +40,7 @@ height *height_array(flow *flowArray, int size) {
     height *heightArray = malloc(sizeof(height) * size);
     const double g = 9.81; // Gravitational acceleration constant
     const double A = 0.20*0.20*PI; // Area of pipe hole
-    double Q; // Volematric flow rate
+    double Q; // Volumetric flow rate
 
     
     
@@ -135,7 +135,7 @@ int number_of_sensors(char folderPath[MAX_SIZE]) {
     if (d) {
         // Loops over all the files in the folder
         while ((dir = readdir(d)) != NULL) {
-            // Checks if the dirnames are not . or ..
+            // Checks if the dir names are not . or ..
             if (strcmp(dir->d_name, ".") && strcmp(dir->d_name, "..")) {
                 count++;
             } 
@@ -158,7 +158,7 @@ sensor *path_of_sensors(char folderPath[]) {
     if (d) {
         // Loops over all the files in the folder
         while ((dir = readdir(d)) != NULL) {
-            // Checks if the dirnames are not . or ..
+            // Checks if the dir names are not . or ..
             if (strcmp(dir->d_name, ".") && strcmp(dir->d_name, "..")) {
                 // Copy the name of the file into path array.
                 strcpy(path[i].path, dir->d_name);
