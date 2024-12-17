@@ -45,10 +45,10 @@ sensor *path_of_sensors(char folderPath[]);
 int comp_asc(const void *, const void *);
 
 // This function takes the average flow in a given time
-double average_flow(int timePeriod, flow flowArray[], int arrayLength);
+double average_flow(double timePeriod, flow flowArray[], int arrayLength);
 
 // This function gives the max or min flow in a given time
-double min_max_flow(int timePeriod, int min_max_bit, flow flowArray[], int size);
+double min_max_flow(double timePeriod, int min_max_bit, flow flowArray[], int size);
 
 // This function returns the flow array from a given id
 flow *flow_from_id(int id, int *size, time_t referenceStartTime);
@@ -63,4 +63,4 @@ overflow_period *overflow_occurrences_id(int id, float threshold, int *overflowC
 overflow_period *overflow_occurrences(height *heightArray, int size, float threshold, int *overflowCount);
 
 // This function calculates the number of measurements in a select period
-int calculate_measurements_for_period(int timePeriod, flow flowArray[]);
+int calculate_measurements_for_period(double timePeriod, flow flowArray[]);

@@ -10,16 +10,23 @@ enum minMaxBit {
 void averageFlowTest(CuTest* tc)
 {
     double averageFlow = 0;
-    int time = 2;
+    double time = 2.5;
 
-    flow flowArray[3] = {
-        {3600, 20},
-        {3600*2, 30},
-        {3600*3, 15}
+    flow flowArray[10] = {
+        {1800, 20},
+        {1800*2, 30},
+        {1800*3, 15},
+        {1800*4, 25},
+        {1800*5, 35},
+        {1800*6, 10},
+        {1800*7, 40},
+        {1800*8, 20},
+        {1800*9, 30},
+        {1800*10, 25}
     };
 
-    averageFlow = average_flow(time, flowArray, 3);
-    CuAssertDblEquals(tc, 22.5, averageFlow, 0.001);
+    averageFlow = average_flow(time, flowArray, 10);
+    CuAssertDblEquals(tc, 25, averageFlow, 0.001);
 }
 
 void minFlowTest(CuTest* tc)

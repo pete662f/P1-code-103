@@ -3,6 +3,11 @@
 #include <string.h>
 #include "functions.h"
 
+enum minMaxBit {
+    MIN,
+    MAX
+};
+
 time_t referenceStartTime;
 
 void water_level_statistics(int sensorChoice);
@@ -12,6 +17,7 @@ void sensor_menu(void);
 
 int main(void) {
     referenceStartTime = time(NULL); // Set the reference start time
+    printf("Starting program\n");
     while (1) {
         sensor_menu(); 
     } 
@@ -101,7 +107,7 @@ void data_menu(int sensorChoice) {
 
 void water_level_statistics(int sensorChoice) {
     int arrLength;
-    int timePeriod;
+    double timePeriod;
     int isValid;
     double averageFlow;
 
@@ -111,7 +117,7 @@ void water_level_statistics(int sensorChoice) {
     printf("Water Level Statistics, sensor %d\n", sensorChoice);
     do {
         printf("Please input number of hours to include data from: ");
-        isValid = scanf(" %d", &timePeriod);
+        isValid = scanf(" %lf", &timePeriod);
         if (timePeriod <= 0 || timePeriod > 3600 || !isValid) {
             printf("\n\x1B[31mInvalid time period!\x1B[0m\n");
         }
@@ -120,13 +126,13 @@ void water_level_statistics(int sensorChoice) {
     averageFlow = average_flow(timePeriod, arr, arrLength);
 
     if (averageFlow < 0.0) {
-        printf("\n\x1B[31mAverage flow is invalid!\x1B[0m\n");
+        printf("\x1B[31mAverage flow is invalid!\x1B[0m\n");
     } else {
-        printf("\nThe average flow is %f mL/hour\n", averageFlow);
+        printf("The average flow is %f mL/hour\n", averageFlow);
     }
     
-    printf("The minimum flow was: %f mL/hour\n", min_max_flow(timePeriod, 1, arr, arrLength));
-    printf("The maximum flow was: %f mL/hour\n", min_max_flow(timePeriod, 0, arr, arrLength));
+    printf("The minimum flow was: %f mL/hour\n", min_max_flow(timePeriod, MIN, arr, arrLength));
+    printf("The maximum flow was: %f mL/hour\n", min_max_flow(timePeriod, MAX, arr, arrLength));
 
     free(arr);
 
@@ -155,7 +161,7 @@ void set_water_level_alarm(int sensorChoice) {
     overflowArray = overflow_occurrences_id(sensorChoice-1, threshold, &overflowCount, referenceStartTime); // sensorChoice-1 because the sensor id starts at 0
 
     printf("Checking sensor %d with threshold %f\n", sensorChoice, threshold);
-    printf("Overflow periods for sensor %d: ", sensorChoice);
+    printf("\nOverflow periods for sensor %d: ", sensorChoice);
 
     if (overflowCount == 0) {
         printf("0\n");

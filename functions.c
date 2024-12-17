@@ -173,7 +173,7 @@ sensor *path_of_sensors(char folderPath[]) {
     return path;
 }
 
-double average_flow(int timePeriod, flow flowArray[], int arrayLength){
+double average_flow(double timePeriod, flow flowArray[], int arrayLength){
    
     double totalFlow = 0;
     double averageFlow = 0;
@@ -190,22 +190,21 @@ double average_flow(int timePeriod, flow flowArray[], int arrayLength){
         totalFlow += flowArray[arrayLength-i].flow;
     }
 
-    averageFlow = totalFlow / timePeriod;
-
+    averageFlow = totalFlow / measurementsForPeriod;
     return averageFlow;
 }
 
-int calculate_measurements_for_period(int timePeriod, flow flowArray[]) {
+int calculate_measurements_for_period(double timePeriod, flow flowArray[]) {
     // timePeriod in hours
     int deltaTime = flowArray[1].timestamp - flowArray[0].timestamp; // In milliseconds
 
     int measurementsPerHour = SEC_TO_HOUR / deltaTime;
-    int measurementsForPeriod = measurementsPerHour * timePeriod;
+    int measurementsForPeriod = (int)((double)measurementsPerHour * timePeriod);
 
     return measurementsForPeriod;
 }
 
-double min_max_flow(int timePeriod, int min_max_bit, flow flowArray[], int size) {
+double min_max_flow(double timePeriod, int min_max_bit, flow flowArray[], int size) {
     //Function assumes sorted flow array with the lowest flow value at index 0.
     int measurementsForPeriod = calculate_measurements_for_period(timePeriod, flowArray);
 
