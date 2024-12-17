@@ -14,6 +14,7 @@ void water_level_statistics(int sensorChoice);
 void set_water_level_alarm(int sensorChoice);
 void data_menu(int sensorChoice);
 void sensor_menu(void);
+void print_data(int sensorChoice);
 
 int main(void) {
     referenceStartTime = time(NULL); // Set the reference start time
@@ -82,6 +83,7 @@ void data_menu(int sensorChoice) {
         printf("0. Exit the program\n");
         printf("1. Water level Statistics\n");
         printf("2. Set water level alarm\n");
+        printf("3. Print data\n");
         printf("Choose where you want to go: ");
         isValid = scanf(" %d", &choice);
 
@@ -99,10 +101,35 @@ void data_menu(int sensorChoice) {
             case 2:
                 set_water_level_alarm(sensorChoice);
                 break;
+            case 3:
+                print_data(sensorChoice);
+                break;
             default:
                 printf("\n\x1B[31mInvalid choice!\x1B[0m\n");    // colors the printf statement in the terminal
         }
     } while (choice < 0 || choice > 4 || !isValid);
+}
+
+void print_data(int sensorChoice)
+{
+    int arrLength;
+    struct tm *timeptr;
+    char timeString[100];
+
+    flow *arr = flow_from_id(sensorChoice-1, &arrLength, referenceStartTime);
+
+    printf("Printing data for sensor %d\n\n", sensorChoice);
+
+    printf("Time Flow\n");
+    for (int i = 0; i < arrLength; ++i)
+    {
+        // Get the time from the timestamp
+        timeptr = localtime(&arr[i].timestamp);
+
+        // Format the time to HH:MM:SS
+        strftime(timeString,sizeof(timeString),"%H:%M:%S", timeptr);
+        printf("%s %.2f\n", timeString, arr[i].flow);
+    }
 }
 
 void water_level_statistics(int sensorChoice) {
