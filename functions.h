@@ -45,10 +45,10 @@ sensor *path_of_sensors(char folderPath[]);
 int comp_asc(const void *, const void *);
 
 // This function takes the average flow in a given time
-double average_flow(double timePeriod, flow flowArray[], int arrayLength);
+double average_flow(int measurementsForPeriod, flow flowArray[], int arrayLength);
 
 // This function gives the max or min flow in a given time
-double min_max_flow(double timePeriod, int min_max_bit, flow flowArray[], int size);
+double min_max_flow(int measurementsForPeriod, int min_max_bit, flow flowArray[], int size);
 
 // This function returns the flow array from a given id
 flow *flow_from_id(int id, int *size, time_t referenceStartTime);

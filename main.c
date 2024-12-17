@@ -136,12 +136,12 @@ void water_level_statistics(int sensorChoice) {
     int arrLength;
     double timePeriod;
     int isValid;
-    double averageFlow;
+    int measurementsForPeriod;
 
     // sensorChoice-1 because the sensor id starts at 0
     flow *arr = flow_from_id(sensorChoice-1, &arrLength, referenceStartTime);
 
-    printf("Water Level Statistics, sensor %d\n", sensorChoice);
+    printf("\nWater Level Statistics, sensor %d\n", sensorChoice);
     do {
         printf("Please input number of hours to include data from: ");
         isValid = scanf(" %lf", &timePeriod);
@@ -150,16 +150,19 @@ void water_level_statistics(int sensorChoice) {
         }
     } while (timePeriod <= 0 || timePeriod > 3600 || !isValid);
 
-    averageFlow = average_flow(timePeriod, arr, arrLength);
+    // For formatting
+    printf("\n");
 
-    if (averageFlow < 0.0) {
-        printf("\x1B[31mAverage flow is invalid!\x1B[0m\n");
+    // Check if there are enough measurements for the given time period
+    measurementsForPeriod = calculate_measurements_for_period(timePeriod, arr);
+
+    if (measurementsForPeriod > arrLength) {
+        printf("\x1B[31mNot enough measurement points. %d were required, but only %d were available, try changing the time period!\x1B[0m\n", measurementsForPeriod, arrLength);
     } else {
-        printf("The average flow is %f mL/hour\n", averageFlow);
+        printf("The average flow is %f mL/hour\n", average_flow(measurementsForPeriod, arr, arrLength));
+        printf("The minimum flow was: %f mL/hour\n", min_max_flow(measurementsForPeriod, MIN, arr, arrLength));
+        printf("The maximum flow was: %f mL/hour\n", min_max_flow(measurementsForPeriod, MAX, arr, arrLength));
     }
-    
-    printf("The minimum flow was: %f mL/hour\n", min_max_flow(timePeriod, MIN, arr, arrLength));
-    printf("The maximum flow was: %f mL/hour\n", min_max_flow(timePeriod, MAX, arr, arrLength));
 
     free(arr);
 

@@ -173,17 +173,9 @@ sensor *path_of_sensors(char folderPath[]) {
     return path;
 }
 
-double average_flow(double timePeriod, flow flowArray[], int arrayLength){
-   
+double average_flow(int measurementsForPeriod, flow flowArray[], int arrayLength){
     double totalFlow = 0;
     double averageFlow = 0;
-    int measurementsForPeriod = calculate_measurements_for_period(timePeriod, flowArray);
-
-    if (measurementsForPeriod > arrayLength) {
-        printf("Not enough measuring points for average flow i the chosen time period. - %d\n", measurementsForPeriod);
-        printf("Length: %d\n", arrayLength);
-        return -1;
-    }
 
     // Check from the latest measurement and back
     for (int i = measurementsForPeriod; i > 0; i--) {
@@ -204,10 +196,8 @@ int calculate_measurements_for_period(double timePeriod, flow flowArray[]) {
     return measurementsForPeriod;
 }
 
-double min_max_flow(double timePeriod, int min_max_bit, flow flowArray[], int size) {
+double min_max_flow(int measurementsForPeriod, int min_max_bit, flow flowArray[], int size) {
     //Function assumes sorted flow array with the lowest flow value at index 0.
-    int measurementsForPeriod = calculate_measurements_for_period(timePeriod, flowArray);
-
     flow flowForTimePeriod[measurementsForPeriod];
 
     // Copy the array to get only the end

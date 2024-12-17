@@ -11,6 +11,7 @@ void averageFlowTest(CuTest* tc)
 {
     double averageFlow = 0;
     double time = 2.5;
+    int measurementsForPeriod;
 
     flow flowArray[10] = {
         {1800, 20},
@@ -25,7 +26,10 @@ void averageFlowTest(CuTest* tc)
         {1800*10, 25}
     };
 
-    averageFlow = average_flow(time, flowArray, 10);
+    measurementsForPeriod = calculate_measurements_for_period(time,flowArray);
+    CuAssertIntEquals(tc, 5, measurementsForPeriod);
+
+    averageFlow = average_flow(measurementsForPeriod, flowArray, 10);
     CuAssertDblEquals(tc, 25, averageFlow, 0.001);
 }
 
