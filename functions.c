@@ -50,8 +50,7 @@ height *height_array(flow *flowArray, int size) {
         exit(EXIT_FAILURE);
     }
     
-    for (int i = 0; i < size; i++)
-    {
+    for (int i = 0; i < size; i++) {
         // Copying the time from the flowArray to the heightArray
         heightArray[i].timestamp = flowArray[i].timestamp;
 
@@ -83,8 +82,7 @@ flow *flow_array_from_file(char *filePath, int *size, time_t referenceStartTime)
 
     // Calculate the number of lines assuming there is a newline at the end.
     // Check if end of file.
-    while (!feof(file)) 
-    {
+    while (!feof(file)) {
         // Get next char in file.
         ch = fgetc(file);
 
@@ -173,7 +171,7 @@ sensor *path_of_sensors(char folderPath[]) {
     return path;
 }
 
-double average_flow(int measurementsForPeriod, flow flowArray[], int arrayLength){
+double average_flow(int measurementsForPeriod, flow flowArray[], int arrayLength) {
     double totalFlow = 0;
     double averageFlow = 0;
 
