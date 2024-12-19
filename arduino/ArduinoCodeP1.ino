@@ -13,12 +13,12 @@ void loop() {
 
   if (currentTime - oldTime >= 5000) { 
     detachInterrupt(digitalPinToInterrupt(sensorPin)); 
-
-    Serial.print("Rotations: ");
-    Serial.print(pulseCount);
-    Serial.print(", Time: ");
-    Serial.println(currentTime);
-
+    float flowRatePrSecond = pulseCount / 4.5;
+    
+    Serial.print(currentTime);
+    Serial.print(" ");
+    Serial.println(flowRatePrSecond);
+   
     pulseCount = 0; 
     oldTime = currentTime; 
 
